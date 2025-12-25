@@ -39,64 +39,69 @@ const Cart = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Cart Items */}
           <div className="lg:col-span-2 space-y-4">
-            {cartItems.map((item) => (
-              <Card key={item.id} className="bg-zinc-900 border-zinc-800">
-                <CardContent className="p-4">
-                  <div className="flex gap-4">
-                    {/* Image */}
-                    <div className="w-24 h-24 rounded-md overflow-hidden bg-zinc-800 flex-shrink-0">
-                      <img
-                        src={item.image}
-                        alt={item.name}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
+            {cartItems.map((item) => {
+              const itemName = language === 'ar' ? item.name_ar : item.name_en;
+              const itemDescription = language === 'ar' ? item.description_ar : item.description_en;
+              
+              return (
+                <Card key={item.id} className="bg-zinc-900 border-zinc-800">
+                  <CardContent className="p-4">
+                    <div className="flex gap-4">
+                      {/* Image */}
+                      <div className="w-24 h-24 rounded-md overflow-hidden bg-zinc-800 flex-shrink-0">
+                        <img
+                          src={item.image}
+                          alt={itemName}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
 
-                    {/* Details */}
-                    <div className="flex-1">
-                      <h3 className="text-lg font-semibold text-white mb-1">{item.name}</h3>
-                      <p className="text-sm text-gray-400 mb-2 line-clamp-1">{item.description}</p>
-                      <div className="flex items-center gap-2">
-                        <span className="text-xl font-bold text-amber-500">
-                          {item.price} {t('sar')}
-                        </span>
-                        {item.originalPrice && (
-                          <span className="text-sm text-gray-500 line-through">
-                            {item.originalPrice}
+                      {/* Details */}
+                      <div className="flex-1">
+                        <h3 className="text-lg font-semibold text-white mb-1">{itemName}</h3>
+                        <p className="text-sm text-gray-400 mb-2 line-clamp-1">{itemDescription}</p>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xl font-bold text-amber-500">
+                            {item.price} {t('sar')}
                           </span>
-                        )}
+                          {item.originalPrice && (
+                            <span className="text-sm text-gray-500 line-through">
+                              {item.originalPrice}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Quantity Controls */}
+                      <div className="flex flex-col items-end justify-between">
+                        <button
+                          onClick={() => removeFromCart(item.id)}
+                          className="text-gray-400 hover:text-red-500 transition-colors"
+                        >
+                          <Trash2 className="h-5 w-5" />
+                        </button>
+
+                        <div className="flex items-center border border-zinc-700 rounded-md">
+                          <button
+                            onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                            className="px-3 py-1 text-white hover:bg-zinc-800 transition-colors"
+                          >
+                            <Minus className="h-4 w-4" />
+                          </button>
+                          <span className="px-4 py-1 text-white font-semibold">{item.quantity}</span>
+                          <button
+                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                            className="px-3 py-1 text-white hover:bg-zinc-800 transition-colors"
+                          >
+                            <Plus className="h-4 w-4" />
+                          </button>
+                        </div>
                       </div>
                     </div>
-
-                    {/* Quantity Controls */}
-                    <div className="flex flex-col items-end justify-between">
-                      <button
-                        onClick={() => removeFromCart(item.id)}
-                        className="text-gray-400 hover:text-red-500 transition-colors"
-                      >
-                        <Trash2 className="h-5 w-5" />
-                      </button>
-
-                      <div className="flex items-center border border-zinc-700 rounded-md">
-                        <button
-                          onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                          className="px-3 py-1 text-white hover:bg-zinc-800 transition-colors"
-                        >
-                          <Minus className="h-4 w-4" />
-                        </button>
-                        <span className="px-4 py-1 text-white font-semibold">{item.quantity}</span>
-                        <button
-                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                          className="px-3 py-1 text-white hover:bg-zinc-800 transition-colors"
-                        >
-                          <Plus className="h-4 w-4" />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
 
           {/* Order Summary */}
