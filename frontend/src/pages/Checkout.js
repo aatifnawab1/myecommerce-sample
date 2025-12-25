@@ -266,17 +266,50 @@ const Checkout = () => {
                 </div>
 
                 <div className="border-t border-zinc-700 pt-4 space-y-2">
+                  {/* Coupon Input */}
+                  <div className="mb-4 pb-4 border-b border-zinc-700">
+                    <Label className="text-white mb-2 block">Coupon Code</Label>
+                    <div className="flex gap-2">
+                      <Input
+                        name="couponCode"
+                        value={formData.couponCode}
+                        onChange={handleInputChange}
+                        placeholder="Enter coupon code"
+                        className="bg-zinc-800 border-zinc-700 text-white"
+                      />
+                      <Button
+                        type="button"
+                        onClick={handleApplyCoupon}
+                        disabled={validatingCoupon}
+                        className="bg-amber-500 hover:bg-amber-600 text-black font-semibold"
+                      >
+                        {validatingCoupon ? 'Validating...' : 'Apply'}
+                      </Button>
+                    </div>
+                    {couponApplied && (
+                      <p className="text-green-500 text-sm mt-2">
+                        ✓ Coupon applied: {couponApplied.discount_percentage}% off
+                      </p>
+                    )}
+                  </div>
+
                   <div className="flex justify-between text-gray-400">
                     <span>{t('subtotal')}</span>
-                    <span>{getCartTotal()} {t('sar')}</span>
+                    <span>{subtotal} {t('sar')}</span>
                   </div>
+                  {couponApplied && (
+                    <div className="flex justify-between text-green-500">
+                      <span>Discount ({couponApplied.discount_percentage}%)</span>
+                      <span>-{discount.toFixed(2)} {t('sar')}</span>
+                    </div>
+                  )}
                   <div className="flex justify-between text-gray-400">
                     <span>Delivery</span>
                     <span className="text-green-500">FREE</span>
                   </div>
                   <div className="flex justify-between text-xl font-bold pt-2">
                     <span className="text-white">{t('total')}</span>
-                    <span className="text-amber-500">{getCartTotal()} {t('sar')}</span>
+                    <span className="text-amber-500">{finalTotal.toFixed(2)} {t('sar')}</span>
                   </div>
                 </div>
 
