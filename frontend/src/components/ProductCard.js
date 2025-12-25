@@ -13,9 +13,11 @@ const ProductCard = ({ product }) => {
   const { t, language } = useLanguage();
   const { addToCart, getCartCount } = useCart();
 
+  const isInStock = product.quantity > 0;
+
   const handleAddToCart = (e) => {
     e.stopPropagation();
-    if (product.inStock) {
+    if (isInStock) {
       addToCart(product);
       const productName = language === 'ar' ? product.name_ar : product.name_en;
       toast.success(`${productName} added to cart!`);
