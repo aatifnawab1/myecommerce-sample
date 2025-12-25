@@ -44,9 +44,9 @@ const About = () => {
               <div className="w-16 h-16 bg-amber-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Target className="h-8 w-8 text-amber-500" />
               </div>
-              <h3 className="text-lg font-bold text-white mb-2">Our Mission</h3>
+              <h3 className="text-lg font-bold text-white mb-2">{t('ourMission')}</h3>
               <p className="text-sm text-gray-400">
-                To deliver luxury and innovation to every doorstep in Saudi Arabia with excellence and authenticity.
+                {t('missionText')}
               </p>
             </CardContent>
           </Card>
@@ -56,9 +56,9 @@ const About = () => {
               <div className="w-16 h-16 bg-amber-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Award className="h-8 w-8 text-amber-500" />
               </div>
-              <h3 className="text-lg font-bold text-white mb-2">Our Quality</h3>
+              <h3 className="text-lg font-bold text-white mb-2">{t('ourQuality')}</h3>
               <p className="text-sm text-gray-400">
-                100% authentic products sourced from authorized distributors and trusted brands worldwide.
+                {t('qualityText')}
               </p>
             </CardContent>
           </Card>
@@ -68,9 +68,9 @@ const About = () => {
               <div className="w-16 h-16 bg-amber-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Users className="h-8 w-8 text-amber-500" />
               </div>
-              <h3 className="text-lg font-bold text-white mb-2">Our Promise</h3>
+              <h3 className="text-lg font-bold text-white mb-2">{t('ourPromise')}</h3>
               <p className="text-sm text-gray-400">
-                Customer satisfaction is our priority. Fast delivery, secure payment, and exceptional service.
+                {t('promiseText')}
               </p>
             </CardContent>
           </Card>
