@@ -52,6 +52,27 @@ class AdminAPI {
     return response.data;
   }
 
+  async uploadImage(file) {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    const response = await axios.post(`${API}/admin/upload-image`, formData, {
+      headers: {
+        ...this.getHeaders(),
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    return response.data;
+  }
+
+  async deleteImage(imageUrl) {
+    const response = await axios.delete(`${API}/admin/delete-image`, {
+      params: { image_url: imageUrl },
+      headers: this.getHeaders()
+    });
+    return response.data;
+  }
+
   async createProduct(productData) {
     const response = await axios.post(`${API}/admin/products`, productData, {
       headers: this.getHeaders()
