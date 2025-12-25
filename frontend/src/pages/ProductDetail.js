@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Star, ShoppingCart, ArrowLeft, Package, Shield, Truck } from 'lucide-react';
 import { Button } from '../components/ui/button';
@@ -6,7 +6,7 @@ import { Card, CardContent } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import { useLanguage } from '../context/LanguageContext';
 import { useCart } from '../context/CartContext';
-import { allProducts } from '../data/mock';
+import publicAPI from '../services/publicAPI';
 import { toast } from 'sonner';
 
 const ProductDetail = () => {
@@ -15,8 +15,32 @@ const ProductDetail = () => {
   const { t, language } = useLanguage();
   const { addToCart, getCartCount } = useCart();
   const [quantity, setQuantity] = useState(1);
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const product = allProducts.find(p => p.id === id);
+  useEffect(() => {
+    fetchProduct();
+  }, [id]);
+
+  const fetchProduct = async () => {
+    try {
+      const data = await publicAPI.getProduct(id);
+      setProduct(data);
+    } catch (error) {
+      console.error('Error fetching product:', error);
+      toast.error('Product not found');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-white">Loading...</div>
+      </div>
+    );
+  }
 
   if (!product) {
     return (
