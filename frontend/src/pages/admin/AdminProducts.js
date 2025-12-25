@@ -34,6 +34,8 @@ const AdminProducts = () => {
     is_visible: true,
     specs: null
   });
+  const [uploading, setUploading] = useState(false);
+  const [imageFiles, setImageFiles] = useState([]);
 
   useEffect(() => {
     fetchProducts();
