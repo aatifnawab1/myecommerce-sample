@@ -8,7 +8,7 @@ import { useCart } from '../context/CartContext';
 
 const Cart = () => {
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { cartItems, updateQuantity, removeFromCart, getCartTotal } = useCart();
 
   if (cartItems.length === 0) {
