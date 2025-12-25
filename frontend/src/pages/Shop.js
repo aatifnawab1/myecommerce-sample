@@ -44,7 +44,7 @@ const Shop = () => {
 
     // Price filter
     if (priceFilter !== 'all') {
-      products = products.filter(product => {
+      filtered = filtered.filter(product => {
         switch (priceFilter) {
           case 'under500':
             return product.price < 500;
