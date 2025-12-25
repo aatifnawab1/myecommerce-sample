@@ -34,7 +34,7 @@ const Shop = () => {
 
     // Search filter
     if (searchQuery) {
-      products = products.filter(product =>
+      filtered = filtered.filter(product =>
         product.name_en.toLowerCase().includes(searchQuery.toLowerCase()) ||
         product.name_ar.includes(searchQuery) ||
         product.description_en.toLowerCase().includes(searchQuery.toLowerCase()) ||
