@@ -1,9 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Star, ShoppingCart, ArrowLeft, Package, Shield, Truck } from 'lucide-react';
+import { Star, ShoppingCart, ArrowLeft, Package, Shield, Truck, Bell } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
+import { Input } from '../components/ui/input';
+import { Label } from '../components/ui/label';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '../components/ui/dialog';
 import { useLanguage } from '../context/LanguageContext';
 import { useCart } from '../context/CartContext';
 import publicAPI from '../services/publicAPI';
@@ -17,6 +25,8 @@ const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [notifyDialogOpen, setNotifyDialogOpen] = useState(false);
+  const [notifyData, setNotifyData] = useState({ phone: '', name: '' });
 
   useEffect(() => {
     fetchProduct();
