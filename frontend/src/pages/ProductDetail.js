@@ -132,18 +132,18 @@ const ProductDetail = () => {
 
             {/* Quantity and Add to Cart */}
             <div className="space-y-4 mb-8">
-              <div className="flex gap-4">
-                <div className="flex items-center border border-zinc-800 rounded-md">
+              <div className="flex flex-col sm:flex-row gap-4">
+                <div className="flex items-center border border-zinc-800 rounded-md w-full sm:w-auto">
                   <button
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="px-4 py-3 text-white hover:bg-zinc-800 transition-colors"
+                    className="px-4 py-3 text-white hover:bg-zinc-800 transition-colors flex-1 sm:flex-none"
                   >
                     -
                   </button>
-                  <span className="px-6 py-3 text-white font-semibold">{quantity}</span>
+                  <span className="px-6 py-3 text-white font-semibold text-center flex-1 sm:flex-none">{quantity}</span>
                   <button
                     onClick={() => setQuantity(quantity + 1)}
-                    className="px-4 py-3 text-white hover:bg-zinc-800 transition-colors"
+                    className="px-4 py-3 text-white hover:bg-zinc-800 transition-colors flex-1 sm:flex-none"
                   >
                     +
                   </button>
@@ -152,7 +152,7 @@ const ProductDetail = () => {
                 <Button
                   onClick={handleAddToCart}
                   disabled={!product.inStock}
-                  className="flex-1 bg-amber-500 hover:bg-amber-600 text-black font-bold text-lg py-6 transition-all hover:scale-[1.02]"
+                  className="w-full sm:flex-1 bg-amber-500 hover:bg-amber-600 text-black font-bold text-lg py-6 transition-all hover:scale-[1.02]"
                 >
                   <ShoppingCart className="mr-2 h-5 w-5" />
                   {product.inStock ? t('addToCart') : t('outOfStock')}
