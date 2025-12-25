@@ -127,7 +127,7 @@ class ZayluxBackendTester:
         """Test coupon validation with valid coupon and sufficient order total"""
         try:
             validation_data = {
-                "code": "SAVE15",
+                "code": self.coupon_code,
                 "order_total": 150.0  # Above minimum order value of 100
             }
             
