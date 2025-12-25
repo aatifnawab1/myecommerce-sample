@@ -357,10 +357,10 @@ class ZayluxBackendTester:
             
             if response.status_code == 200:
                 coupons = response.json()
-                save15_coupon = next((c for c in coupons if c.get("code") == "SAVE15"), None)
+                test_coupon = next((c for c in coupons if c.get("code") == self.coupon_code), None)
                 
-                if save15_coupon:
-                    new_usage = save15_coupon.get("usage_count", 0)
+                if test_coupon:
+                    new_usage = test_coupon.get("usage_count", 0)
                     
                     if new_usage > initial_usage:
                         self.log_test("Coupon Usage Increment", True, 
@@ -371,7 +371,7 @@ class ZayluxBackendTester:
                                     f"Usage count not incremented: {initial_usage} -> {new_usage}")
                         return False
                 else:
-                    self.log_test("Coupon Usage Increment", False, "SAVE15 coupon not found after validation")
+                    self.log_test("Coupon Usage Increment", False, f"{self.coupon_code} coupon not found after validation")
                     return False
             else:
                 self.log_test("Coupon Usage Increment", False, "Failed to get coupons after validation")
