@@ -67,10 +67,29 @@ const ProductDetail = () => {
 
   const productName = language === 'ar' ? product.name_ar : product.name_en;
   const productDescription = language === 'ar' ? product.description_ar : product.description_en;
+  const isInStock = product.quantity > 0;
 
   const handleAddToCart = () => {
     addToCart(product, quantity);
     toast.success(`${quantity}x ${productName} added to cart!`);
+  };
+
+  const handleNotifyMe = async (e) => {
+    e.preventDefault();
+    
+    if (!notifyData.phone) {
+      toast.error('Please enter your phone number');
+      return;
+    }
+
+    try {
+      await publicAPI.createNotifyRequest(product.id, notifyData.phone, notifyData.name);
+      toast.success(language === 'ar' ? 'سنقوم بإعلامك عند توفر المنتج' : 'We will notify you when the product is available');
+      setNotifyDialogOpen(false);
+      setNotifyData({ phone: '', name: '' });
+    } catch (error) {
+      toast.error(error.response?.data?.detail || 'Failed to submit request');
+    }
   };
 
   const discount = product.originalPrice
