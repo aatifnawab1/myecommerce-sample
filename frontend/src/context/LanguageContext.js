@@ -33,6 +33,8 @@ export const translations = {
     remove: 'Remove',
     subtotal: 'Subtotal',
     proceedToCheckout: 'Proceed to Checkout',
+    viewCart: 'View Cart',
+    itemsInCart: 'items in cart',
     
     // Checkout
     checkout: 'Checkout',
