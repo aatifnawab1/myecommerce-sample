@@ -35,6 +35,54 @@ async def verify_admin_token(authorization: str = Header(None)):
     
     return payload
 
+# ==================== FILE UPLOAD ====================
+
+UPLOAD_DIR = Path("/app/backend/uploads/products")
+UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+
+@admin_router.post("/upload-image")
+async def upload_image(
+    file: UploadFile = File(...),
+    admin: dict = Depends(verify_admin_token)
+):
+    """Upload a product image"""
+    # Validate file type
+    allowed_types = ["image/jpeg", "image/jpg", "image/png", "image/webp"]
+    if file.content_type not in allowed_types:
+        raise HTTPException(status_code=400, detail="Invalid file type. Only JPEG, PNG, and WEBP are allowed")
+    
+    # Generate unique filename
+    file_extension = file.filename.split(".")[-1]
+    unique_filename = f"{uuid.uuid4()}.{file_extension}"
+    file_path = UPLOAD_DIR / unique_filename
+    
+    # Save file
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+    
+    # Return URL path
+    image_url = f"/api/uploads/products/{unique_filename}"
+    return {"image_url": image_url}
+
+@admin_router.delete("/delete-image")
+async def delete_image(
+    image_url: str,
+    admin: dict = Depends(verify_admin_token)
+):
+    """Delete a product image"""
+    try:
+        # Extract filename from URL
+        filename = image_url.split("/")[-1]
+        file_path = UPLOAD_DIR / filename
+        
+        if file_path.exists():
+            file_path.unlink()
+            return {"message": "Image deleted successfully"}
+        else:
+            raise HTTPException(status_code=404, detail="Image not found")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 # ==================== ADMIN AUTHENTICATION ====================
 
 @admin_router.post("/login", response_model=AdminResponse)
