@@ -148,7 +148,7 @@ const AdminProducts = () => {
   };
 
   if (loading) {
-    return <div className=\"text-white\">Loading products...</div>;
+    return <div className="text-white">Loading products...</div>;
   }
 
   return (
