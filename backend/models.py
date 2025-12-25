@@ -88,6 +88,7 @@ class OrderItem(BaseModel):
 
 class Order(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    public_order_id: Optional[str] = None  # Customer-friendly ID like ZAY-100001
     customer_name: str
     phone: str
     city: str
@@ -102,6 +103,22 @@ class Order(BaseModel):
     customer_id: Optional[str] = None
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
+
+# Order Tracking Models
+class OrderTrackRequest(BaseModel):
+    order_id: str  # Public order ID (ZAY-XXXXXX)
+    phone: str
+
+class OrderTrackResponse(BaseModel):
+    public_order_id: str
+    customer_name: str
+    order_date: str
+    items: List[OrderItem]
+    subtotal: float
+    discount: float
+    total: float
+    status: str
+    status_ar: str
 
 class OrderCreate(BaseModel):
     customer_name: str
