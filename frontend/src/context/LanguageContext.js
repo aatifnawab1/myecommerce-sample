@@ -112,6 +112,8 @@ export const translations = {
     remove: 'إزالة',
     subtotal: 'المجموع الفرعي',
     proceedToCheckout: 'إتمام الطلب',
+    viewCart: 'عرض السلة',
+    itemsInCart: 'منتجات في السلة',
     
     // Checkout
     checkout: 'إتمام الطلب',
