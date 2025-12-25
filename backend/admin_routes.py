@@ -1,7 +1,11 @@
-from fastapi import APIRouter, HTTPException, Header, Depends
+from fastapi import APIRouter, HTTPException, Header, Depends, UploadFile, File
 from typing import List, Optional
 from datetime import datetime
 from motor.motor_asyncio import AsyncIOMotorDatabase
+import os
+import uuid
+import shutil
+from pathlib import Path
 from models import (
     Admin, AdminLogin, AdminResponse,
     Product, ProductCreate, ProductUpdate,
