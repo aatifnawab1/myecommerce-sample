@@ -106,8 +106,9 @@ const Checkout = () => {
     };
 
     try {
-      await publicAPI.createOrder(orderData);
-      toast.success('Order placed successfully!');
+      const response = await publicAPI.createOrder(orderData);
+      setPublicOrderId(response.public_order_id);
+      toast.success(language === 'ar' ? 'تم تقديم الطلب بنجاح!' : 'Order placed successfully!');
       setOrderPlaced(true);
       clearCart();
     } catch (error) {
