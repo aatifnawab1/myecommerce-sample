@@ -38,7 +38,31 @@ const Checkout = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleApplyCoupon = async () => {
+    if (!formData.couponCode.trim()) {
+      toast.error('Please enter a coupon code');
+      return;
+    }
+
+    setValidatingCoupon(true);
+    try {
+      const response = await publicAPI.validateCoupon(formData.couponCode, getCartTotal());
+      if (response.valid) {
+        setCouponApplied(response);
+        toast.success(response.message);
+      } else {
+        toast.error(response.message);
+        setCouponApplied(null);
+      }
+    } catch (error) {
+      toast.error('Failed to validate coupon');
+      setCouponApplied(null);
+    } finally {
+      setValidatingCoupon(false);
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Validate form
@@ -47,20 +71,43 @@ const Checkout = () => {
       return;
     }
 
-    // Simulate order placement
+    const subtotal = getCartTotal();
+    const discount = couponApplied ? couponApplied.discount_amount : 0;
+    const total = subtotal - discount;
+
+    // Prepare order data
     const orderData = {
-      ...formData,
-      items: cartItems,
-      total: getCartTotal(),
-      orderDate: new Date().toISOString(),
-      orderId: `ORD-${Date.now()}`
+      customer_name: formData.fullName,
+      phone: formData.phoneNumber,
+      city: formData.city,
+      address: formData.address,
+      items: cartItems.map(item => ({
+        product_id: item.id,
+        name_en: item.name_en,
+        name_ar: item.name_ar,
+        price: item.price,
+        quantity: item.quantity,
+        image: item.images?.[0] || item.image || ''
+      })),
+      subtotal: subtotal,
+      discount: discount,
+      total: total,
+      coupon_code: couponApplied ? formData.couponCode : null
     };
 
-    console.log('Order placed:', orderData);
-    toast.success('Order placed successfully!');
-    setOrderPlaced(true);
-    clearCart();
+    try {
+      await publicAPI.createOrder(orderData);
+      toast.success('Order placed successfully!');
+      setOrderPlaced(true);
+      clearCart();
+    } catch (error) {
+      toast.error(error.response?.data?.detail || 'Failed to place order');
+    }
   };
+
+  const subtotal = getCartTotal();
+  const discount = couponApplied ? couponApplied.discount_amount : 0;
+  const finalTotal = subtotal - discount;
 
   if (orderPlaced) {
     return (
