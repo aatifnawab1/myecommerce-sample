@@ -79,7 +79,7 @@ const ProductCard = ({ product }) => {
           </span>
         </div>
 
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-2">
           <div>
             <div className="flex items-center gap-2">
               <span className="text-xl font-bold text-amber-500">
@@ -93,14 +93,33 @@ const ProductCard = ({ product }) => {
             </div>
           </div>
 
-          <Button
-            size="sm"
-            disabled={!product.inStock}
-            onClick={handleAddToCart}
-            className="bg-amber-500 hover:bg-amber-600 text-black font-semibold transition-all"
-          >
-            <ShoppingCart className="h-4 w-4" />
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              size="sm"
+              disabled={!product.inStock}
+              onClick={handleAddToCart}
+              className="bg-amber-500 hover:bg-amber-600 text-black font-semibold transition-all"
+            >
+              <ShoppingCart className="h-4 w-4" />
+            </Button>
+            
+            {getCartCount() > 0 && (
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate('/cart');
+                }}
+                className="border-amber-500 text-amber-500 hover:bg-amber-500 hover:text-black transition-all relative"
+              >
+                <ShoppingCart className="h-4 w-4" />
+                <span className="absolute -top-2 -right-2 h-5 w-5 rounded-full bg-amber-500 text-black text-xs flex items-center justify-center font-bold">
+                  {getCartCount()}
+                </span>
+              </Button>
+            )}
+          </div>
         </div>
       </CardContent>
     </Card>
