@@ -122,8 +122,13 @@ async def create_order(
                 detail=f"Insufficient stock for {product.get('name_en', 'product')}"
             )
     
-    # Create order
-    order = Order(**order_data.model_dump())
+    # Generate public order ID
+    public_order_id = await generate_public_order_id(db)
+    
+    # Create order with public ID
+    order_dict = order_data.model_dump()
+    order_dict["public_order_id"] = public_order_id
+    order = Order(**order_dict)
     await db.orders.insert_one(order.model_dump())
     
     # Reduce product quantities
@@ -134,6 +139,43 @@ async def create_order(
         )
     
     return order
+
+# ==================== ORDER TRACKING ====================
+
+@public_router.post("/orders/track", response_model=OrderTrackResponse)
+async def track_order(
+    track_data: OrderTrackRequest,
+    db: AsyncIOMotorDatabase = Depends(get_db)
+):
+    """Track an order by public order ID and phone number"""
+    # Find order by public_order_id and phone
+    order = await db.orders.find_one(
+        {
+            "public_order_id": track_data.order_id.upper(),
+            "phone": track_data.phone
+        },
+        {"_id": 0}
+    )
+    
+    if not order:
+        raise HTTPException(
+            status_code=404, 
+            detail="Order not found. Please check your Order ID and phone number."
+        )
+    
+    # Format the response
+    status = order.get("status", "Pending")
+    return OrderTrackResponse(
+        public_order_id=order["public_order_id"],
+        customer_name=order["customer_name"],
+        order_date=order["created_at"].isoformat() if isinstance(order["created_at"], datetime) else order["created_at"],
+        items=order["items"],
+        subtotal=order.get("subtotal", 0),
+        discount=order.get("discount", 0),
+        total=order.get("total", 0),
+        status=status,
+        status_ar=STATUS_TRANSLATIONS.get(status, status)
+    )
 
 # ==================== COUPONS ====================
 
