@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Package, MapPin, Phone, User, CheckCircle } from 'lucide-react';
+import { Package, MapPin, Phone, User, CheckCircle, Copy, Search } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
 import { Input } from '../components/ui/input';
@@ -33,6 +33,7 @@ const Checkout = () => {
   });
   const [couponApplied, setCouponApplied] = useState(null);
   const [validatingCoupon, setValidatingCoupon] = useState(false);
+  const [publicOrderId, setPublicOrderId] = useState(null);
   const [orderPlaced, setOrderPlaced] = useState(false);
 
   if (cartItems.length === 0 && !orderPlaced) {
