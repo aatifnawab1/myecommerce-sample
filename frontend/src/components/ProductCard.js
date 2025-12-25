@@ -51,7 +51,7 @@ const ProductCard = ({ product }) => {
             -{discount}%
           </Badge>
         )}
-        {!product.inStock && (
+        {!isInStock && (
           <div className="absolute inset-0 bg-black/70 flex items-center justify-center">
             <span className="text-white font-semibold text-lg">{t('outOfStock')}</span>
           </div>
