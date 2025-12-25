@@ -131,31 +131,44 @@ const ProductDetail = () => {
             )}
 
             {/* Quantity and Add to Cart */}
-            <div className="flex gap-4 mb-8">
-              <div className="flex items-center border border-zinc-800 rounded-md">
-                <button
-                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="px-4 py-3 text-white hover:bg-zinc-800 transition-colors"
+            <div className="space-y-4 mb-8">
+              <div className="flex gap-4">
+                <div className="flex items-center border border-zinc-800 rounded-md">
+                  <button
+                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                    className="px-4 py-3 text-white hover:bg-zinc-800 transition-colors"
+                  >
+                    -
+                  </button>
+                  <span className="px-6 py-3 text-white font-semibold">{quantity}</span>
+                  <button
+                    onClick={() => setQuantity(quantity + 1)}
+                    className="px-4 py-3 text-white hover:bg-zinc-800 transition-colors"
+                  >
+                    +
+                  </button>
+                </div>
+
+                <Button
+                  onClick={handleAddToCart}
+                  disabled={!product.inStock}
+                  className="flex-1 bg-amber-500 hover:bg-amber-600 text-black font-bold text-lg py-6 transition-all hover:scale-[1.02]"
                 >
-                  -
-                </button>
-                <span className="px-6 py-3 text-white font-semibold">{quantity}</span>
-                <button
-                  onClick={() => setQuantity(quantity + 1)}
-                  className="px-4 py-3 text-white hover:bg-zinc-800 transition-colors"
-                >
-                  +
-                </button>
+                  <ShoppingCart className="mr-2 h-5 w-5" />
+                  {product.inStock ? t('addToCart') : t('outOfStock')}
+                </Button>
               </div>
 
-              <Button
-                onClick={handleAddToCart}
-                disabled={!product.inStock}
-                className="flex-1 bg-amber-500 hover:bg-amber-600 text-black font-bold text-lg py-6 transition-all hover:scale-[1.02]"
-              >
-                <ShoppingCart className="mr-2 h-5 w-5" />
-                {product.inStock ? t('addToCart') : t('outOfStock')}
-              </Button>
+              {/* View Cart Button */}
+              {getCartCount() > 0 && (
+                <Button
+                  onClick={() => navigate('/cart')}
+                  variant="outline"
+                  className="w-full border-2 border-amber-500 text-amber-500 hover:bg-amber-500 hover:text-black font-semibold text-lg py-6 transition-all"
+                >
+                  {t('viewCart')} ({getCartCount()} {t('itemsInCart')})
+                </Button>
+              )}
             </div>
 
             {/* Features */}
