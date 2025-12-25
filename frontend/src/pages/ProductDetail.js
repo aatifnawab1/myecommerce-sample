@@ -13,7 +13,7 @@ const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { t, language } = useLanguage();
-  const { addToCart } = useCart();
+  const { addToCart, getCartCount } = useCart();
   const [quantity, setQuantity] = useState(1);
 
   const product = allProducts.find(p => p.id === id);
