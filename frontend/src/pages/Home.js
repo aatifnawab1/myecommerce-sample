@@ -178,11 +178,13 @@ const Home = () => {
               className="relative h-80 rounded-lg overflow-hidden group cursor-pointer"
               onClick={() => navigate('/drones')}
             >
-              <img
-                src={drones[0].image}
-                alt="Drones"
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-              />
+              {drones[0] && (
+                <img
+                  src={drones[0].images?.[0] || drones[0].image}
+                  alt="Drones"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+              )}
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent flex flex-col justify-end p-8">
                 <h3 className="text-3xl font-bold text-white mb-2">{t('drones')}</h3>
                 <p className="text-gray-300 mb-4">Discover advanced technology</p>
