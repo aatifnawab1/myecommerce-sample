@@ -299,7 +299,7 @@ class ZayluxBackendTester:
                 applied_coupon = data.get("coupon_code")
                 order_discount = data.get("discount", 0)
                 
-                if applied_coupon == "SAVE15" and abs(order_discount - discount_amount) < 0.01:
+                if applied_coupon == self.coupon_code and abs(order_discount - discount_amount) < 0.01:
                     self.log_test("Create Order with Coupon", True, 
                                 f"Order created with ID: {order_id}, Discount: {order_discount} SAR")
                     return True
