@@ -121,6 +121,11 @@ const Checkout = () => {
   const finalTotal = subtotal - discount;
 
   if (orderPlaced) {
+    const copyOrderId = () => {
+      navigator.clipboard.writeText(publicOrderId);
+      toast.success(language === 'ar' ? 'تم نسخ رقم الطلب' : 'Order ID copied!');
+    };
+
     return (
       <div className="min-h-screen bg-black flex items-center justify-center px-4">
         <Card className="bg-zinc-900 border-zinc-800 max-w-md w-full">
@@ -128,23 +133,50 @@ const Checkout = () => {
             <div className="w-20 h-20 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
               <CheckCircle className="h-10 w-10 text-green-500" />
             </div>
-            <h2 className="text-2xl font-bold text-white mb-2">Order Placed Successfully!</h2>
+            <h2 className="text-2xl font-bold text-white mb-2">{t('orderPlacedSuccess')}</h2>
             <p className="text-gray-400 mb-6">
-              Thank you for your order. We'll contact you shortly to confirm delivery.
+              {t('thankYouOrder')}
             </p>
+            
+            {/* Order ID Display */}
+            {publicOrderId && (
+              <div className="bg-zinc-800 rounded-lg p-4 mb-6">
+                <p className="text-gray-400 text-sm mb-2">{t('yourOrderId')}</p>
+                <div className="flex items-center justify-center gap-3">
+                  <span className="text-2xl font-bold text-amber-500">{publicOrderId}</span>
+                  <button 
+                    onClick={copyOrderId}
+                    className="p-2 hover:bg-zinc-700 rounded-md transition-colors"
+                    title={language === 'ar' ? 'نسخ' : 'Copy'}
+                  >
+                    <Copy className="h-5 w-5 text-gray-400 hover:text-white" />
+                  </button>
+                </div>
+                <p className="text-gray-500 text-xs mt-2">{t('saveOrderId')}</p>
+              </div>
+            )}
+            
             <div className="space-y-3">
               <Button
-                onClick={() => navigate('/')}
+                onClick={() => navigate('/track-order')}
                 className="w-full bg-amber-500 hover:bg-amber-600 text-black font-semibold"
               >
-                Back to Home
+                <Search className="h-4 w-4 mr-2" />
+                {t('trackMyOrder')}
               </Button>
               <Button
-                onClick={() => navigate('/shop')}
+                onClick={() => navigate('/')}
                 variant="outline"
                 className="w-full border-zinc-700 text-gray-400 hover:text-white hover:bg-zinc-800"
               >
-                Continue Shopping
+                {t('backToHome')}
+              </Button>
+              <Button
+                onClick={() => navigate('/shop')}
+                variant="ghost"
+                className="w-full text-gray-400 hover:text-white"
+              >
+                {t('continueShopping')}
               </Button>
             </div>
           </CardContent>
