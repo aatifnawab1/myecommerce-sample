@@ -329,17 +329,17 @@ class ZayluxBackendTester:
                 return False
             
             coupons = response.json()
-            save15_coupon = next((c for c in coupons if c.get("code") == "SAVE15"), None)
+            test_coupon = next((c for c in coupons if c.get("code") == self.coupon_code), None)
             
-            if not save15_coupon:
-                self.log_test("Coupon Usage Increment", False, "SAVE15 coupon not found")
+            if not test_coupon:
+                self.log_test("Coupon Usage Increment", False, f"{self.coupon_code} coupon not found")
                 return False
             
-            initial_usage = save15_coupon.get("usage_count", 0)
+            initial_usage = test_coupon.get("usage_count", 0)
             
             # Validate coupon to increment usage
             validation_data = {
-                "code": "SAVE15",
+                "code": self.coupon_code,
                 "order_total": 150.0
             }
             
