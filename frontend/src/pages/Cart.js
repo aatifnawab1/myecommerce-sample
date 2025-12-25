@@ -59,7 +59,7 @@ const Cart = () => {
                       {/* Image */}
                       <div className="w-24 h-24 rounded-md overflow-hidden bg-zinc-800 flex-shrink-0">
                         <img
-                          src={item.image}
+                          src={getImageUrl(item.images?.[0] || item.image || '')}
                           alt={itemName}
                           className="w-full h-full object-cover"
                         />
