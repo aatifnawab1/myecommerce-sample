@@ -17,6 +17,15 @@ import { useCart } from '../context/CartContext';
 import publicAPI from '../services/publicAPI';
 import { toast } from 'sonner';
 
+// Helper to get full image URL
+const getImageUrl = (imageUrl) => {
+  if (!imageUrl) return '';
+  if (imageUrl.startsWith('/api/')) {
+    return `${process.env.REACT_APP_BACKEND_URL}${imageUrl}`;
+  }
+  return imageUrl;
+};
+
 const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
