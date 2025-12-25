@@ -58,10 +58,10 @@ const ProductCard = ({ product }) => {
 
       <CardContent className="p-4">
         <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-amber-500 transition-colors">
-          {product.name}
+          {productName}
         </h3>
 
-        <p className="text-sm text-gray-400 mb-3 line-clamp-2">{product.description}</p>
+        <p className="text-sm text-gray-400 mb-3 line-clamp-2">{productDescription}</p>
 
         <div className="flex items-center gap-1 mb-3">
           {[...Array(5)].map((_, i) => (
