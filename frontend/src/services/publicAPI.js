@@ -39,6 +39,15 @@ class PublicAPI {
     });
     return response.data;
   }
+
+  // Order Tracking
+  async trackOrder(orderId, phone) {
+    const response = await axios.post(`${API}/orders/track`, {
+      order_id: orderId,
+      phone
+    });
+    return response.data;
+  }
 }
 
 export default new PublicAPI();
