@@ -12,7 +12,7 @@ import { toast } from 'sonner';
 const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { addToCart } = useCart();
   const [quantity, setQuantity] = useState(1);
 
@@ -31,9 +31,12 @@ const ProductDetail = () => {
     );
   }
 
+  const productName = language === 'ar' ? product.name_ar : product.name_en;
+  const productDescription = language === 'ar' ? product.description_ar : product.description_en;
+
   const handleAddToCart = () => {
     addToCart(product, quantity);
-    toast.success(`${quantity}x ${product.name} added to cart!`);
+    toast.success(`${quantity}x ${productName} added to cart!`);
   };
 
   const discount = product.originalPrice
