@@ -229,15 +229,16 @@ class ZayluxBackendTester:
             
             if response.status_code == 200:
                 products = response.json()
-                if products:
-                    product = products[0]  # Use first available product
-                    return {
-                        "id": product["id"],
-                        "name_en": product["name_en"],
-                        "name_ar": product["name_ar"],
-                        "price": product["price"],
-                        "image": product["images"][0] if product["images"] else ""
-                    }
+                # Find a product with sufficient stock
+                for product in products:
+                    if product.get("quantity", 0) > 0:
+                        return {
+                            "id": product["id"],
+                            "name_en": product["name_en"],
+                            "name_ar": product["name_ar"],
+                            "price": product["price"],
+                            "image": product["images"][0] if product["images"] else ""
+                        }
             return None
             
         except Exception as e:
