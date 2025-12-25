@@ -350,15 +350,64 @@ const AdminProducts = () => {
               </div>
 
               <div>
-                <Label htmlFor="images" className="text-white">Image URLs (one per line)</Label>
-                <Textarea
-                  id="images"
-                  value={formData.images.join('\n')}
-                  onChange={handleImageChange}
-                  className="bg-zinc-800 border-zinc-700 text-white"
-                  rows={4}
-                  placeholder="https://example.com/image1.jpg\nhttps://example.com/image2.jpg"
-                />
+                <Label className="text-white">Product Images</Label>
+                
+                {/* Image Previews */}
+                {formData.images.length > 0 && (
+                  <div className="grid grid-cols-4 gap-3 mt-2 mb-3">
+                    {formData.images.map((imageUrl, index) => (
+                      <div key={index} className="relative group">
+                        <img
+                          src={getImageUrl(imageUrl)}
+                          alt={`Product ${index + 1}`}
+                          className="w-full h-24 object-cover rounded-md border border-zinc-700"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveImage(imageUrl, index)}
+                          className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <X className="h-3 w-3" />
+                        </button>
+                        {index === 0 && (
+                          <span className="absolute bottom-1 left-1 bg-amber-500 text-black text-xs px-1.5 py-0.5 rounded">
+                            Main
+                          </span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+                
+                {/* Upload Button */}
+                <div 
+                  className="border-2 border-dashed border-zinc-700 rounded-lg p-4 text-center cursor-pointer hover:border-amber-500 transition-colors"
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleFileSelect}
+                    accept="image/jpeg,image/jpg,image/png,image/webp"
+                    multiple
+                    className="hidden"
+                  />
+                  {uploading ? (
+                    <div className="flex items-center justify-center gap-2 text-amber-500">
+                      <Loader2 className="h-5 w-5 animate-spin" />
+                      <span>Uploading...</span>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col items-center gap-2 text-gray-400">
+                      <div className="flex items-center gap-2">
+                        <ImageIcon className="h-5 w-5" />
+                        <Upload className="h-5 w-5" />
+                      </div>
+                      <span className="text-sm">Click to upload images</span>
+                      <span className="text-xs text-gray-500">JPEG, PNG, WebP (max 5MB each)</span>
+                    </div>
+                  )}
+                </div>
               </div>
 
               <div className="flex items-center gap-2">
