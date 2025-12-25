@@ -450,7 +450,7 @@ const AdminProducts = () => {
               <div className="flex gap-6">
                 {product.images && product.images[0] && (
                   <img
-                    src={product.images[0]}
+                    src={getImageUrl(product.images[0])}
                     alt={product.name_en}
                     className="w-32 h-32 object-cover rounded-md"
                   />
