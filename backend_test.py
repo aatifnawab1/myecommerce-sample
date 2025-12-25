@@ -63,8 +63,13 @@ class ZayluxBackendTester:
     def test_create_coupon(self) -> str:
         """Test coupon creation via admin API"""
         try:
+            # Use a timestamp to make the coupon code unique
+            import time
+            timestamp = str(int(time.time()))[-4:]  # Last 4 digits of timestamp
+            coupon_code = f"SAVE15{timestamp}"
+            
             coupon_data = {
-                "code": "SAVE15",
+                "code": coupon_code,
                 "discount_percentage": 15.0,
                 "min_order_value": 100.0,
                 "is_active": True,
@@ -80,7 +85,8 @@ class ZayluxBackendTester:
             if response.status_code == 200:
                 data = response.json()
                 coupon_id = data.get("id")
-                self.log_test("Create Coupon", True, f"Coupon created with ID: {coupon_id}")
+                self.coupon_code = coupon_code  # Store for later tests
+                self.log_test("Create Coupon", True, f"Coupon created with ID: {coupon_id}, Code: {coupon_code}")
                 return coupon_id
             else:
                 self.log_test("Create Coupon", False, f"Status: {response.status_code}, Response: {response.text}")
