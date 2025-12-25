@@ -275,6 +275,55 @@ const ProductDetail = () => {
           </div>
         </div>
       </div>
+
+      {/* Notify Me Dialog */}
+      <Dialog open={notifyDialogOpen} onOpenChange={setNotifyDialogOpen}>
+        <DialogContent className="bg-zinc-900 border-zinc-800 text-white">
+          <DialogHeader>
+            <DialogTitle className="text-white">
+              {language === 'ar' ? 'إشعار عند التوفر' : 'Notify Me'}
+            </DialogTitle>
+          </DialogHeader>
+          
+          <form onSubmit={handleNotifyMe} className="space-y-4">
+            <div>
+              <Label htmlFor="phone" className="text-white">
+                {language === 'ar' ? 'رقم الهاتف' : 'Phone Number'} *
+              </Label>
+              <Input
+                id="phone"
+                type="tel"
+                value={notifyData.phone}
+                onChange={(e) => setNotifyData({ ...notifyData, phone: e.target.value })}
+                placeholder="+966 50 123 4567"
+                className="bg-zinc-800 border-zinc-700 text-white"
+                required
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="name" className="text-white">
+                {language === 'ar' ? 'الاسم (اختياري)' : 'Name (Optional)'}
+              </Label>
+              <Input
+                id="name"
+                type="text"
+                value={notifyData.name}
+                onChange={(e) => setNotifyData({ ...notifyData, name: e.target.value })}
+                placeholder={language === 'ar' ? 'اسمك' : 'Your name'}
+                className="bg-zinc-800 border-zinc-700 text-white"
+              />
+            </div>
+
+            <Button
+              type="submit"
+              className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold"
+            >
+              {language === 'ar' ? 'تأكيد الطلب' : 'Submit Request'}
+            </Button>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
