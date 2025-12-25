@@ -16,6 +16,18 @@ def get_db():
     from server import db
     return db
 
+# ==================== FILE SERVING ====================
+
+@public_router.get("/uploads/products/{filename}")
+async def serve_product_image(filename: str):
+    """Serve uploaded product images"""
+    file_path = Path("/app/backend/uploads/products") / filename
+    
+    if not file_path.exists():
+        raise HTTPException(status_code=404, detail="Image not found")
+    
+    return FileResponse(file_path)
+
 # ==================== PRODUCTS ====================
 
 @public_router.get("/products", response_model=List[Product])
