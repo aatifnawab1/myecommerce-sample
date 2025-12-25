@@ -219,7 +219,31 @@ export const translations = {
     whyReason2: 'الدفع عند الاستلام في جميع أنحاء المملكة',
     whyReason3: 'توصيل سريع وآمن',
     whyReason4: 'أسعار تنافسية وعروض حصرية',
-    whyReason5: 'دعم عملاء ثنائي اللغة (عربي/إنجليزي)'
+    whyReason5: 'دعم عملاء ثنائي اللغة (عربي/إنجليزي)',
+    
+    // Order Success & Tracking
+    orderPlacedSuccess: 'تم تقديم الطلب بنجاح!',
+    yourOrderId: 'رقم طلبك',
+    saveOrderId: 'يرجى حفظ رقم الطلب هذا لتتبع طلبك.',
+    trackMyOrder: 'تتبع طلبي',
+    backToHome: 'العودة للرئيسية',
+    orderTracking: 'تتبع الطلب',
+    trackOrderSubtitle: 'أدخل رقم الطلب ورقم الهاتف لتتبع طلبك',
+    orderId: 'رقم الطلب',
+    orderIdPlaceholder: 'مثال: ZAY-100001',
+    phonePlaceholder: '+966 50 123 4567',
+    trackOrder: 'تتبع الطلب',
+    orderDetails: 'تفاصيل الطلب',
+    orderDate: 'تاريخ الطلب',
+    orderedItems: 'المنتجات المطلوبة',
+    orderStatus: 'حالة الطلب',
+    statusPending: 'قيد الانتظار',
+    statusConfirmed: 'تم التأكيد',
+    statusShipped: 'تم الشحن',
+    statusDelivered: 'تم التوصيل',
+    statusCancelled: 'ملغي',
+    orderNotFound: 'لم يتم العثور على الطلب. يرجى التحقق من رقم الطلب ورقم الهاتف.',
+    thankYouOrder: 'شكراً لطلبك. سنتواصل معك قريباً لتأكيد التوصيل.'
   }
 };
 
