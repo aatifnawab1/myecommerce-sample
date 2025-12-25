@@ -147,6 +147,7 @@ const AdminProducts = () => {
       specs: null
     });
     setEditingProduct(null);
+    setImagePreviews([]);
   };
 
   const handleEdit = (product) => {
