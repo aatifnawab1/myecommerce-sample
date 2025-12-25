@@ -6,7 +6,8 @@ from motor.motor_asyncio import AsyncIOMotorDatabase
 from pathlib import Path
 from models import (
     Product, NotifyRequestCreate, NotifyRequest,
-    Order, OrderCreate, CouponValidate, CouponValidateResponse
+    Order, OrderCreate, CouponValidate, CouponValidateResponse,
+    OrderTrackRequest, OrderTrackResponse
 )
 
 public_router = APIRouter(tags=["Public"])
@@ -15,6 +16,28 @@ public_router = APIRouter(tags=["Public"])
 def get_db():
     from server import db
     return db
+
+# Status translations for Arabic
+STATUS_TRANSLATIONS = {
+    "Pending": "قيد الانتظار",
+    "Confirmed": "تم التأكيد",
+    "Shipped": "تم الشحن",
+    "Delivered": "تم التوصيل",
+    "Cancelled": "ملغي"
+}
+
+# Helper function to generate public order ID
+async def generate_public_order_id(db: AsyncIOMotorDatabase) -> str:
+    """Generate a unique public order ID like ZAY-100001"""
+    # Get or create the counter document
+    counter = await db.counters.find_one_and_update(
+        {"_id": "order_counter"},
+        {"$inc": {"sequence": 1}},
+        upsert=True,
+        return_document=True
+    )
+    sequence = counter.get("sequence", 100001)
+    return f"ZAY-{sequence}"
 
 # ==================== FILE SERVING ====================
 
