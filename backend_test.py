@@ -18,6 +18,7 @@ class ZayluxBackendTester:
         self.base_url = BACKEND_URL
         self.admin_token = None
         self.test_results = []
+        self.coupon_code = "SAVE15"  # Default, will be updated in create_coupon
         
     def log_test(self, test_name: str, success: bool, details: str = ""):
         """Log test results"""
