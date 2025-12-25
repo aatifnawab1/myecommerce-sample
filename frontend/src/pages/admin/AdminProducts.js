@@ -61,9 +61,75 @@ const AdminProducts = () => {
     }));
   };
 
-  const handleImageChange = (e) => {
-    const urls = e.target.value.split('\n').filter(url => url.trim());
-    setFormData(prev => ({ ...prev, images: urls }));
+  // Handle file selection for images
+  const handleFileSelect = async (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length === 0) return;
+
+    setUploading(true);
+    
+    for (const file of files) {
+      // Validate file type
+      if (!['image/jpeg', 'image/jpg', 'image/png', 'image/webp'].includes(file.type)) {
+        toast.error(`${file.name} is not a valid image type`);
+        continue;
+      }
+
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error(`${file.name} is too large (max 5MB)`);
+        continue;
+      }
+
+      try {
+        const response = await adminAPI.uploadImage(file);
+        const imageUrl = response.image_url;
+        
+        setFormData(prev => ({
+          ...prev,
+          images: [...prev.images, imageUrl]
+        }));
+        toast.success(`Image uploaded successfully`);
+      } catch (error) {
+        toast.error(`Failed to upload ${file.name}`);
+      }
+    }
+    
+    setUploading(false);
+    // Reset file input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  // Remove an image from the list
+  const handleRemoveImage = async (imageUrl, index) => {
+    try {
+      // Only delete from server if it's an uploaded image (starts with /api/uploads)
+      if (imageUrl.startsWith('/api/uploads')) {
+        await adminAPI.deleteImage(imageUrl);
+      }
+      
+      setFormData(prev => ({
+        ...prev,
+        images: prev.images.filter((_, i) => i !== index)
+      }));
+      toast.success('Image removed');
+    } catch (error) {
+      // Still remove from UI even if server delete fails
+      setFormData(prev => ({
+        ...prev,
+        images: prev.images.filter((_, i) => i !== index)
+      }));
+    }
+  };
+
+  // Get full image URL for display
+  const getImageUrl = (imageUrl) => {
+    if (imageUrl.startsWith('/api/')) {
+      return `${process.env.REACT_APP_BACKEND_URL}${imageUrl}`;
+    }
+    return imageUrl;
   };
 
   const resetForm = () => {
