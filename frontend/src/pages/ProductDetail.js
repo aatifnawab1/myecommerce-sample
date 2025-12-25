@@ -80,7 +80,7 @@ const ProductDetail = () => {
               </Badge>
             </div>
 
-            <h1 className="text-4xl font-bold text-white mb-4">{product.name}</h1>
+            <h1 className="text-4xl font-bold text-white mb-4">{productName}</h1>
 
             <div className="flex items-center gap-2 mb-6">
               <div className="flex items-center gap-1">
@@ -111,7 +111,7 @@ const ProductDetail = () => {
               )}
             </div>
 
-            <p className="text-gray-300 mb-8 text-lg leading-relaxed">{product.description}</p>
+            <p className="text-gray-300 mb-8 text-lg leading-relaxed">{productDescription}</p>
 
             {/* Specifications for Drones */}
             {product.specs && (
