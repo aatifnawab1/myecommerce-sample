@@ -107,13 +107,13 @@ class ZayluxBackendTester:
             
             if response.status_code == 200:
                 coupons = response.json()
-                save15_found = any(coupon.get("code") == "SAVE15" for coupon in coupons)
+                coupon_found = any(coupon.get("code") == self.coupon_code for coupon in coupons)
                 
-                if save15_found:
-                    self.log_test("Get Coupons", True, f"Found {len(coupons)} coupons, SAVE15 coupon exists")
+                if coupon_found:
+                    self.log_test("Get Coupons", True, f"Found {len(coupons)} coupons, {self.coupon_code} coupon exists")
                     return True
                 else:
-                    self.log_test("Get Coupons", False, "SAVE15 coupon not found in list")
+                    self.log_test("Get Coupons", False, f"{self.coupon_code} coupon not found in list")
                     return False
             else:
                 self.log_test("Get Coupons", False, f"Status: {response.status_code}, Response: {response.text}")
