@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import adminAPI from '../../services/adminAPI';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
@@ -13,7 +13,7 @@ import {
   DialogTrigger,
 } from '../../components/ui/dialog';
 import { Card, CardContent } from '../../components/ui/card';
-import { Plus, Edit, Trash2, Eye, EyeOff } from 'lucide-react';
+import { Plus, Edit, Trash2, Eye, EyeOff, Upload, X, ImageIcon, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 const AdminProducts = () => {
