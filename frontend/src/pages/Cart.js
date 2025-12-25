@@ -6,6 +6,15 @@ import { Card, CardContent } from '../components/ui/card';
 import { useLanguage } from '../context/LanguageContext';
 import { useCart } from '../context/CartContext';
 
+// Helper to get full image URL
+const getImageUrl = (imageUrl) => {
+  if (!imageUrl) return '';
+  if (imageUrl.startsWith('/api/')) {
+    return `${process.env.REACT_APP_BACKEND_URL}${imageUrl}`;
+  }
+  return imageUrl;
+};
+
 const Cart = () => {
   const navigate = useNavigate();
   const { t, language } = useLanguage();
