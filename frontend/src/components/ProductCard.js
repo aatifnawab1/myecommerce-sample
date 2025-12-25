@@ -98,7 +98,7 @@ const ProductCard = ({ product }) => {
           <div className="flex items-center gap-2">
             <Button
               size="sm"
-              disabled={!product.inStock}
+              disabled={!isInStock}
               onClick={handleAddToCart}
               className="bg-amber-500 hover:bg-amber-600 text-black font-semibold transition-all"
             >
