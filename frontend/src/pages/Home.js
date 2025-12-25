@@ -39,7 +39,7 @@ const Home = () => {
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black z-10" />
           <img
-            src={heroImage}
+            src="https://images.unsplash.com/photo-1615540732776-ed0a2145e8f1?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2MzR8MHwxfHNlYXJjaHwyfHxwcmVtaXVtJTIwbGlmZXN0eWxlfGVufDB8fHx8MTc2NjY3MDAyMXww&ixlib=rb-4.1.0&q=85"
             alt="Luxury lifestyle"
             className="w-full h-full object-cover"
           />
