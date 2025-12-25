@@ -49,6 +49,9 @@ const Footer = () => {
           <div>
             <h3 className="text-white font-semibold mb-4">{t('customerService')}</h3>
             <div className="flex flex-col gap-2">
+              <Link to="/track-order" className="text-sm text-gray-400 hover:text-amber-500 transition-colors">
+                {t('trackMyOrder')}
+              </Link>
               <Link to="/contact" className="text-sm text-gray-400 hover:text-amber-500 transition-colors">
                 {t('contact')}
               </Link>
