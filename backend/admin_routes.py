@@ -291,7 +291,11 @@ async def create_coupon(
     if existing:
         raise HTTPException(status_code=400, detail="Coupon code already exists")
     
-    coupon = Coupon(**coupon_data.model_dump(), code=coupon_data.code.upper())
+    # Convert to dict and update code to uppercase
+    coupon_dict = coupon_data.model_dump()
+    coupon_dict["code"] = coupon_dict["code"].upper()
+    
+    coupon = Coupon(**coupon_dict)
     await db.coupons.insert_one(coupon.model_dump())
     return coupon
 
