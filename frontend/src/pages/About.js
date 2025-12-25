@@ -18,7 +18,7 @@ const About = () => {
           </div>
           <h1 className="text-4xl font-bold text-white mb-4">{t('aboutUs')}</h1>
           <p className="text-lg text-gray-400">
-            Your premier destination for luxury perfumes and premium drones in Saudi Arabia
+            {t('aboutTitle')}
           </p>
         </div>
 
@@ -26,17 +26,13 @@ const About = () => {
           <Card className="bg-zinc-900 border-zinc-800 mb-8">
             <CardContent className="p-8">
               <p className="text-gray-300 leading-relaxed mb-4">
-                Welcome to Zaylux Store, where luxury meets innovation. We are a Saudi-based premium e-commerce
-                platform dedicated to bringing you the finest selection of luxury perfumes and cutting-edge drones.
+                {t('aboutPara1')}
               </p>
               <p className="text-gray-300 leading-relaxed mb-4">
-                Founded with a vision to redefine online shopping in the Kingdom, we curate only the best products
-                that embody elegance, quality, and technological excellence. Our commitment is to provide an
-                exceptional shopping experience that reflects the sophistication and modern lifestyle of our customers.
+                {t('aboutPara2')}
               </p>
               <p className="text-gray-300 leading-relaxed">
-                At Zaylux, we believe in authentic products, transparent pricing, and customer satisfaction. Every
-                item in our collection is carefully selected to meet the highest standards of quality and luxury.
+                {t('aboutPara3')}
               </p>
             </CardContent>
           </Card>
