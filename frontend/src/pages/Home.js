@@ -158,11 +158,13 @@ const Home = () => {
               className="relative h-80 rounded-lg overflow-hidden group cursor-pointer"
               onClick={() => navigate('/perfumes')}
             >
-              <img
-                src={perfumes[0].image}
-                alt="Perfumes"
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-              />
+              {perfumes[0] && (
+                <img
+                  src={perfumes[0].images?.[0] || perfumes[0].image}
+                  alt="Perfumes"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+              )}
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent flex flex-col justify-end p-8">
                 <h3 className="text-3xl font-bold text-white mb-2">{t('perfumes')}</h3>
                 <p className="text-gray-300 mb-4">Explore luxury fragrances</p>
