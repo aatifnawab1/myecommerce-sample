@@ -284,7 +284,7 @@ class ZayluxBackendTester:
                 "subtotal": subtotal,
                 "discount": discount_amount,
                 "total": total,
-                "coupon_code": "SAVE15"
+                "coupon_code": self.coupon_code
             }
             
             response = requests.post(
