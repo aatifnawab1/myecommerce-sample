@@ -12,7 +12,7 @@ import { toast } from 'sonner';
 
 const Checkout = () => {
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { cartItems, getCartTotal, clearCart } = useCart();
   const [formData, setFormData] = useState({
     fullName: '',
