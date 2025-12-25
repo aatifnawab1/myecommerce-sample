@@ -1,17 +1,36 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Sparkles, Package, Shield, Truck } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
 import { useLanguage } from '../context/LanguageContext';
 import ProductCard from '../components/ProductCard';
-import { perfumes, drones, heroImage } from '../data/mock';
+import publicAPI from '../services/publicAPI';
 
 const Home = () => {
   const navigate = useNavigate();
   const { t } = useLanguage();
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const featuredProducts = [...perfumes.slice(0, 3), ...drones.slice(0, 1)];
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const fetchProducts = async () => {
+    try {
+      const data = await publicAPI.getProducts();
+      setProducts(data);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const featuredProducts = products.slice(0, 4);
+  const perfumes = products.filter(p => p.category === 'perfume');
+  const drones = products.filter(p => p.category === 'drone');
 
   return (
     <div className="min-h-screen bg-black">
