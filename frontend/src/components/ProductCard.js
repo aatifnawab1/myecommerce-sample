@@ -11,7 +11,7 @@ import { toast } from 'sonner';
 const ProductCard = ({ product }) => {
   const navigate = useNavigate();
   const { t, language } = useLanguage();
-  const { addToCart } = useCart();
+  const { addToCart, getCartCount } = useCart();
 
   const handleAddToCart = (e) => {
     e.stopPropagation();
