@@ -189,26 +189,29 @@ const Checkout = () => {
                 <h2 className="text-xl font-bold text-white mb-6">{t('orderSummary')}</h2>
 
                 <div className="space-y-4 mb-6">
-                  {cartItems.map((item) => (
-                    <div key={item.id} className="flex gap-3">
-                      <div className="w-16 h-16 rounded-md overflow-hidden bg-zinc-800 flex-shrink-0">
-                        <img
-                          src={item.image}
-                          alt={item.name}
-                          className="w-full h-full object-cover"
-                        />
+                  {cartItems.map((item) => {
+                    const itemName = language === 'ar' ? item.name_ar : item.name_en;
+                    return (
+                      <div key={item.id} className="flex gap-3">
+                        <div className="w-16 h-16 rounded-md overflow-hidden bg-zinc-800 flex-shrink-0">
+                          <img
+                            src={item.image}
+                            alt={itemName}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="text-sm font-semibold text-white">{itemName}</h4>
+                          <p className="text-xs text-gray-400">
+                            {t('quantity')}: {item.quantity}
+                          </p>
+                          <p className="text-sm font-medium text-amber-500">
+                            {item.price * item.quantity} {t('sar')}
+                          </p>
+                        </div>
                       </div>
-                      <div className="flex-1">
-                        <h4 className="text-sm font-semibold text-white">{item.name}</h4>
-                        <p className="text-xs text-gray-400">
-                          {t('quantity')}: {item.quantity}
-                        </p>
-                        <p className="text-sm font-medium text-amber-500">
-                          {item.price * item.quantity} {t('sar')}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
 
                 <div className="border-t border-zinc-700 pt-4 space-y-2">
