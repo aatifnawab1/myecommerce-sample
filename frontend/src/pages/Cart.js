@@ -111,14 +111,17 @@ const Cart = () => {
                 <h3 className="text-xl font-bold text-white mb-6">Order Summary</h3>
 
                 <div className="space-y-3 mb-6">
-                  {cartItems.map((item) => (
-                    <div key={item.id} className="flex justify-between text-sm">
-                      <span className="text-gray-400">
-                        {item.name} x {item.quantity}
-                      </span>
-                      <span className="text-white">{item.price * item.quantity} {t('sar')}</span>
-                    </div>
-                  ))}
+                  {cartItems.map((item) => {
+                    const itemName = language === 'ar' ? item.name_ar : item.name_en;
+                    return (
+                      <div key={item.id} className="flex justify-between text-sm">
+                        <span className="text-gray-400">
+                          {itemName} x {item.quantity}
+                        </span>
+                        <span className="text-white">{item.price * item.quantity} {t('sar')}</span>
+                      </div>
+                    );
+                  })}
                 </div>
 
                 <div className="border-t border-zinc-700 pt-4 mb-6">
