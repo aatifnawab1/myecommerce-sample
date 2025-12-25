@@ -5,7 +5,63 @@
 - Report pass/fail status for each test
 - Capture screenshots for UI tests
 
-## Current Test: Product Image Upload Feature
+## Current Test: Coupon Creation and Application Flow
+
+### Test Objectives
+1. Test coupon creation in Admin Dashboard ✅ PASSED
+2. Test coupon validation with valid parameters ✅ PASSED
+3. Test coupon validation with insufficient order value ✅ PASSED
+4. Test coupon validation with invalid code ✅ PASSED
+5. Test order creation with coupon applied ✅ PASSED
+6. Test coupon usage count increment ✅ PASSED
+
+### Test Environment
+- Admin URL: /admin/coupons
+- Admin Credentials: admin / admin123
+- Backend Coupon API: POST /api/admin/coupons
+- Coupon Validation API: POST /api/coupons/validate
+- Order Creation API: POST /api/orders
+
+### Test Results Summary
+**✅ CORE FUNCTIONALITY WORKING:**
+- Admin login successful
+- Coupon creation via admin API working (POST /api/admin/coupons returns 200 OK)
+- Coupon listing in admin dashboard working (GET /api/admin/coupons returns 200 OK)
+- Coupon validation with valid parameters working (15% discount calculated correctly)
+- Coupon validation properly rejects insufficient order values (minimum 100 SAR enforced)
+- Coupon validation properly rejects invalid coupon codes
+- Order creation with coupon discount working (POST /api/orders returns 200 OK)
+- Coupon usage count increments correctly after validation
+- Discount calculation accurate (15% of order total)
+- Backend serving all coupon endpoints correctly
+
+**✅ ALL TESTS PASSED - NO ISSUES FOUND**
+
+### Test Steps Executed
+1. ✅ Admin login - PASSED
+2. ✅ Create coupon with code, 15% discount, 100 SAR minimum - PASSED
+3. ✅ Verify coupon appears in admin coupon list - PASSED
+4. ✅ Validate coupon with 150 SAR order (above minimum) - PASSED
+5. ✅ Validate coupon with 50 SAR order (below minimum) - PASSED
+6. ✅ Validate invalid coupon code - PASSED
+7. ✅ Create order with coupon applied and discount calculated - PASSED
+8. ✅ Verify coupon usage count incremented - PASSED
+
+### Backend Verification
+- Admin login endpoint working: `POST /api/admin/login HTTP/1.1" 200 OK`
+- Coupon creation endpoint working: `POST /api/admin/coupons HTTP/1.1" 200 OK`
+- Coupon listing endpoint working: `GET /api/admin/coupons HTTP/1.1" 200 OK`
+- Coupon validation endpoint working: `POST /api/coupons/validate HTTP/1.1" 200 OK`
+- Order creation endpoint working: `POST /api/orders HTTP/1.1" 200 OK`
+
+### Test Data Created
+- Successfully created coupon with unique code (SAVE15xxxx format)
+- Coupon configured with 15% discount and 100 SAR minimum order value
+- Successfully created test order with coupon discount applied
+- Order total correctly calculated with 15% discount
+- Coupon usage count properly incremented
+
+### Previous Test: Product Image Upload Feature
 
 ### Test Objectives
 1. Test image upload in Admin Dashboard product creation ✅ PASSED
