@@ -84,7 +84,7 @@ const ProductDetail = () => {
           <div className="relative">
             <div className="aspect-square rounded-lg overflow-hidden bg-zinc-900">
               <img
-                src={product.image}
+                src={product.images?.[0] || product.image || ''}
                 alt={product.name}
                 className="w-full h-full object-cover"
               />
