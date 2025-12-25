@@ -80,7 +80,25 @@ export const translations = {
     phone: 'Phone',
     address: 'Address',
     sendMessage: 'Send Message',
-    yourMessage: 'Your Message'
+    yourMessage: 'Your Message',
+    
+    // About Us Content
+    aboutTitle: 'Your premier destination for luxury perfumes and premium drones in Saudi Arabia',
+    aboutPara1: 'Welcome to Zaylux Store, where luxury meets innovation. We are a Saudi-based premium e-commerce platform dedicated to bringing you the finest selection of luxury perfumes and cutting-edge drones.',
+    aboutPara2: 'Founded with a vision to redefine online shopping in the Kingdom, we curate only the best products that embody elegance, quality, and technological excellence. Our commitment is to provide an exceptional shopping experience that reflects the sophistication and modern lifestyle of our customers.',
+    aboutPara3: 'At Zaylux, we believe in authentic products, transparent pricing, and customer satisfaction. Every item in our collection is carefully selected to meet the highest standards of quality and luxury.',
+    ourMission: 'Our Mission',
+    missionText: 'To deliver luxury and innovation to every doorstep in Saudi Arabia with excellence and authenticity.',
+    ourQuality: 'Our Quality',
+    qualityText: '100% authentic products sourced from authorized distributors and trusted brands worldwide.',
+    ourPromise: 'Our Promise',
+    promiseText: 'Customer satisfaction is our priority. Fast delivery, secure payment, and exceptional service.',
+    whyChoose: 'Why Choose Zaylux?',
+    whyReason1: 'Authentic luxury products guaranteed',
+    whyReason2: 'Cash on Delivery across KSA',
+    whyReason3: 'Fast and secure delivery',
+    whyReason4: 'Competitive pricing and exclusive deals',
+    whyReason5: 'Bilingual customer support (EN/AR)'
   },
   ar: {
     // Header
