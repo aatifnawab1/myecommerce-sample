@@ -70,7 +70,15 @@ const Perfumes = () => {
     }
 
     return products;
-  }, [searchQuery, priceFilter, sortBy]);
+  }, [allProducts, searchQuery, priceFilter, sortBy]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-white">Loading perfumes...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-black py-8 px-4">
