@@ -10,14 +10,15 @@ import { toast } from 'sonner';
 
 const ProductCard = ({ product }) => {
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { addToCart } = useCart();
 
   const handleAddToCart = (e) => {
     e.stopPropagation();
     if (product.inStock) {
       addToCart(product);
-      toast.success(`${product.name} added to cart!`);
+      const productName = language === 'ar' ? product.name_ar : product.name_en;
+      toast.success(`${productName} added to cart!`);
     }
   };
 
@@ -28,6 +29,9 @@ const ProductCard = ({ product }) => {
   const discount = product.originalPrice
     ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
     : 0;
+
+  const productName = language === 'ar' ? product.name_ar : product.name_en;
+  const productDescription = language === 'ar' ? product.description_ar : product.description_en;
 
   return (
     <Card
