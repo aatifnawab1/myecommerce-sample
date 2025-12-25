@@ -18,8 +18,10 @@ const Shop = () => {
     // Search filter
     if (searchQuery) {
       products = products.filter(product =>
-        product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        product.description.toLowerCase().includes(searchQuery.toLowerCase())
+        product.name_en.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        product.name_ar.includes(searchQuery) ||
+        product.description_en.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        product.description_ar.includes(searchQuery)
       );
     }
 
