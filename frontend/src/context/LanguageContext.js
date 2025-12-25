@@ -98,7 +98,31 @@ export const translations = {
     whyReason2: 'Cash on Delivery across KSA',
     whyReason3: 'Fast and secure delivery',
     whyReason4: 'Competitive pricing and exclusive deals',
-    whyReason5: 'Bilingual customer support (EN/AR)'
+    whyReason5: 'Bilingual customer support (EN/AR)',
+    
+    // Order Success & Tracking
+    orderPlacedSuccess: 'Order Placed Successfully!',
+    yourOrderId: 'Your Order ID',
+    saveOrderId: 'Please save this Order ID to track your order.',
+    trackMyOrder: 'Track My Order',
+    backToHome: 'Back to Home',
+    orderTracking: 'Order Tracking',
+    trackOrderSubtitle: 'Enter your Order ID and phone number to track your order',
+    orderId: 'Order ID',
+    orderIdPlaceholder: 'e.g., ZAY-100001',
+    phonePlaceholder: '+966 50 123 4567',
+    trackOrder: 'Track Order',
+    orderDetails: 'Order Details',
+    orderDate: 'Order Date',
+    orderedItems: 'Ordered Items',
+    orderStatus: 'Order Status',
+    statusPending: 'Pending',
+    statusConfirmed: 'Confirmed',
+    statusShipped: 'Shipped',
+    statusDelivered: 'Delivered',
+    statusCancelled: 'Cancelled',
+    orderNotFound: 'Order not found. Please check your Order ID and phone number.',
+    thankYouOrder: 'Thank you for your order. We will contact you shortly to confirm delivery.'
   },
   ar: {
     // Header
