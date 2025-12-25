@@ -1,0 +1,198 @@
+<analysis>**original_problem_statement:**
+The user wants to create a luxury e-commerce website named “Zaylux Store” for the Saudi Arabian market.
+
+**PRODUCT REQUIREMENTS:**
+
+*   **Phase 1 Products:** Perfumes and Drones.
+*   **Core Features:**
+    *   Cash on Delivery (COD) checkout.
+    *   Mobile-first, fast-loading design with a premium black, gold, and white theme.
+    *   Bilingual support (English and Arabic) with a manual language toggle (EN | AR) in the header.
+    *   Proper RTL layout for Arabic.
+    *   Language preference must persist across sessions.
+*   **Required Public Pages:** Home, Shop, Perfumes, Drones, Product Detail, About Us, Contact Us, Privacy Policy, Terms & Conditions, Return & Refund Policy.
+*   **Admin Dashboard (Secure & English-only UI):**
+    *   **Authentication:** Secure admin login and protected routes.
+    *   **Product Management:** Full CRUD for products, including bilingual names/descriptions, price, stock quantity, and multi-image uploads (replacing URL inputs).
+    *   **Notify Me Feature:** For out-of-stock products, collect customer phone numbers for demand tracking. Admin must be able to view these requests.
+    *   **Order Management:** View all COD orders and update their status (Pending, Confirmed, Shipped, etc.).
+    *   **Customer Management:** View customer details, order history, and block/unblock customers.
+    *   **Coupon Management:** Create/manage percentage-based discount codes with expiry dates and minimum order values.
+*   **Checkout:** Must allow applying valid coupon codes.
+
+**User's preferred language**: English
+
+**what currently exists?**
+A full-stack e-commerce application is in place.
+-   **Frontend:** A complete, responsive React frontend with a premium theme, bilingual (EN/AR) support, and all required public pages. It's fully connected to the backend, fetching live product data and creating orders. The stock logic correctly displays Add to Cart or Notify Me based on live inventory quantity.
+-   **Backend:** A FastAPI backend with a MongoDB database. It includes public APIs for the store and a comprehensive set of protected admin APIs for managing products, orders, customers, coupons, and Notify Me requests.
+-   **Admin Dashboard:** A functional, multi-page admin UI with secure login. It allows management of products (text fields only for now), orders, customers, and coupons.
+-   A critical bug preventing coupon creation in the backend has been fixed but requires verification.
+-   Backend infrastructure for file uploads (API endpoint and static file serving) has been created.
+
+**Last working item**:
+*   **Last item agent was working:** Implementing the multi-image file upload functionality in the Admin Dashboard's product management section. The agent had just finished the backend setup (creating upload/serving routes) and updating the  service. The next step was to modify the  frontend component to replace the image URL inputs with a file upload interface.
+*   **Status:** IN PROGRESS
+*   **Agent Testing Done:** N
+*   **Which testing method agent to use?** both. The main agent should first manually test the image upload in the admin dashboard. After a product is created/updated with images, the frontend testing agent should be used to verify the product detail page on the public website displays the main image and gallery correctly.
+*   **User Testing Done:** N
+
+**All Pending/In progress Issue list**:
+*   **Issue 1: Verify Coupon Creation Fix (P0)**
+    *   **Description:** A backend fix was implemented for a critical bug where saving new coupons failed. This fix has not been verified through the UI.
+    *   **Attempted fixes:** The agent identified a  error in  and applied a fix. The backend was restarted.
+    *   **Next debug checklist:**
+        1.  Log in to the Admin Dashboard.
+        2.  Navigate to the Coupons section.
+        3.  Create a new percentage-based coupon (e.g.,  for 15% off).
+        4.  Verify it saves successfully and appears in the coupon list.
+        5.  Go to the public website, add an item to the cart, and proceed to checkout.
+        6.  Apply the newly created coupon code and verify the discount is applied correctly to the total.
+    *   **Why fix this issue and what will be achieved with the fix?** This is a critical business feature. Fixing it will enable marketing promotions and complete the coupon management lifecycle.
+    *   **Status:** USER VERIFICATION PENDING
+    *   **Is recurring issue?** N
+    *   **Should Test frontend/backend/both after fix?** both
+    *   **Blocked on other issue:** None
+
+**In progress Task List**:
+*   **Task 1: Implement Product Image Upload in Admin UI (P0)**
+    *   **Description:** Replace the image URL text inputs in the product creation/editing form with a proper file upload interface that supports multiple images, previews, and removal.
+    *   **Where to resume:** Modify the  component. The agent was just about to start this update. The backend routes (, ) and the  service are ready.
+    *   **What will be achieved with this?** Admins will be able to upload product images directly from their devices, which is a core requirement for product management. The public site will then display these uploaded images.
+    *   **Status:** IN PROGRESS
+    *   **Should Test frontend/backend/both after fix?** both
+    *   **Blocked on something:** None
+
+**Upcoming and Future Tasks**
+There are no outstanding future tasks. All initial requirements are either completed or in progress.
+
+**Completed work in this session**
+-   **Full-Stack Application:** Created the Zaylux Store from scratch.
+-   **Frontend Development:**
+    -   Built all public-facing pages (Home, Shop, Product Detail, etc.) with a premium theme.
+    -   Implemented bilingual (EN/AR) support with RTL and language persistence.
+    -   Integrated cart, COD checkout, and coupon application logic.
+    -   Connected the entire public frontend to the live backend API, removing all mock data.
+    -   Implemented dynamic stock logic (Add to Cart vs. Notify Me).
+-   **Backend Development:**
+    -   Set up FastAPI server with MongoDB connection.
+    -   Defined all necessary database models ().
+    -   Built all public and admin API endpoints (, ).
+    -   Implemented secure JWT-based authentication for the admin panel.
+-   **Admin Dashboard:**
+    -   Created a complete, protected admin dashboard with a dedicated layout and sidebar.
+    -   Built UI for managing Products, Orders, Customers, Product Demand, and Coupons.
+-   **Bug Fixes & Refinements:**
+    -   Fixed bilingual data display issues across all pages.
+    -   Resolved multiple data sync issues between the admin panel and the public site.
+    -   Corrected the live stock quantity logic on the frontend.
+    -   Patched the critical coupon-saving bug in the backend.
+
+**Earlier issues found/mentioned but not fixed**
+*   **Issue 1: State Loss During Screenshot Testing**
+    *   **Description:** The agent repeatedly encountered an issue where the shopping cart would empty between page navigations when using the screenshot tool. This forced the agent to re-add items multiple times to test different pages in the same flow (e.g., cart -> checkout).
+    *   **Debug checklist:** This is likely an issue with how the testing tool handles sessions or client-side state. The next agent should be aware that multi-step user flows might need to be scripted carefully in a single screenshot command or that state might not persist between separate  calls.
+    *   **Why to solve this issue and what will be achieved with this?** While not a user-facing bug, resolving this would make testing more efficient and reliable for the agent.
+    *   **Should Test frontend/backend/both after fix:** NA (This is a tool/testing methodology issue)
+    *   **Is recurring issue?** Y
+
+**Known issue recurrence from previous fork**
+  - None.
+
+**Code Architecture**
+
+
+**Key Technical Concepts**
+*   **Frontend:** React, React Router, React Context API (for state management of language, cart, and admin auth), TailwindCSS, shadcn/ui components.
+*   **Backend:** FastAPI, Pydantic (for data modeling and validation), Motor (async MongoDB driver), JWT (for admin authentication).
+*   **Database:** MongoDB.
+*   **Architecture:** Full-stack with a decoupled frontend and backend communicating via REST APIs.
+
+**key DB schema**
+Defined in :
+*   **User:** 
+*   **Product:** 
+*   **Order:** 
+*   **NotifyMe:** 
+*   **Coupon:** 
+
+**changes in tech stack**
+  - No changes from the initial stack.
+
+**All files of reference**
+*   : Needs to be modified to implement file upload UI.
+*   : Contains the new  endpoint and the fixed  endpoint.
+*   : Contains the new  static file serving route.
+*   : Updated with an  function.
+*   : Updated to handle  and show the Notify Me button/dialog.
+*   : Updated to use  instead of .
+*   : Updated to use the backend API for creating orders and applying coupons.
+*   All public-facing pages (, , etc.) were updated to fetch data from  instead of .
+
+**Areas that need refactoring**:
+*   ****: This file is very large and complex. It should be broken down into smaller, more manageable components (e.g., , , ).
+*   **Data Fetching Logic:** The , , and  pages contain very similar logic for fetching, searching, and filtering products. This could be extracted into a reusable custom hook (e.g., ).
+*   ****: The file  is now obsolete and should be deleted to avoid confusion.
+
+**key api endpoints**
+*   **Admin Auth:**
+    *    (Login)
+    *   
+*   **Admin CRUD:**
+    *   
+    *   
+    *    (New)
+    *   
+    *   
+*   **Public API:**
+    *   
+    *   
+    *   
+    *   
+    *   
+*   **Static Files:**
+    *    (New)
+
+**Critical Info for New Agent**
+*   **Admin Credentials:** , .
+*   The application has been migrated from mock data to a live backend. All frontend components should use the services in  for data.
+*   The immediate priorities are completing the image upload feature and verifying the coupon fix.
+
+**documents and test_reports created in this job**
+  - None.
+
+**Last 10 User Messages and any pending HUMAN messages**
+1.   We are almost done. Please fix the following TWO remaining issues without changing any existing working logic. [Image Upload & Coupon Save Failure]
+2.   Product sync is partially working now, but there are two connected issues... [Stock quantity not reflecting, Notify Me not showing]
+3.   Everything is clear. Please proceed with building the Admin Dashboard frontend UI using the existing backend APIs.
+4.   I am not running this project locally. Please deploy the application or share a live preview URL.
+5.   please give me the link to access the admin dashboard
+6.   Yes, please continue. Proceed with building the remaining Admin Dashboard pages...
+7.   Fix bilingual handling for the About Us section and remove unwanted content.
+8.   Fix cart visibility and improve product CTA layout.
+9.   Fix bilingual (English/Arabic) handling for product data.
+10.  There is a clear backend wiring issue... [Public site and Admin not connected to same backend/DB]
+
+**Project Health Check:**
+*   **Broken:**
+    *   Admin Product Management is partially broken as image URLs cannot be replaced with file uploads yet.
+*   **Mocked:**
+    *   None. All mock data has been replaced with live API calls.
+
+**3rd Party Integrations**
+  - None.
+
+**Testing status**
+*   **Testing agent used after significant changes:** NO
+*   **Troubleshoot agent used after agent stuck in loop:** NO
+*   **Test files created:** None.
+*   **Known regressions:** None.
+
+**Credentials to test flow:**
+*   **Admin Dashboard:**
+    *   **Username:** 
+    *   **Password:** 
+
+**What agent forgot to execute**
+-   The agent was in the middle of implementing the image upload UI in . This is not forgotten, but interrupted.
+-   The agent fixed the backend coupon bug but did not perform an end-to-end verification test from the UI, which is a crucial final step.</analysis>
