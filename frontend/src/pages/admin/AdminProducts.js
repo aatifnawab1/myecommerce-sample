@@ -35,7 +35,8 @@ const AdminProducts = () => {
     specs: null
   });
   const [uploading, setUploading] = useState(false);
-  const [imageFiles, setImageFiles] = useState([]);
+  const [imagePreviews, setImagePreviews] = useState([]); // For preview before upload
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     fetchProducts();
