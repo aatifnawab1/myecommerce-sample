@@ -8,6 +8,7 @@ import { Label } from '../components/ui/label';
 import { Textarea } from '../components/ui/textarea';
 import { useLanguage } from '../context/LanguageContext';
 import { useCart } from '../context/CartContext';
+import publicAPI from '../services/publicAPI';
 import { toast } from 'sonner';
 
 const Checkout = () => {
@@ -18,8 +19,11 @@ const Checkout = () => {
     fullName: '',
     phoneNumber: '',
     city: '',
-    address: ''
+    address: '',
+    couponCode: ''
   });
+  const [couponApplied, setCouponApplied] = useState(null);
+  const [validatingCoupon, setValidatingCoupon] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
 
   if (cartItems.length === 0 && !orderPlaced) {
