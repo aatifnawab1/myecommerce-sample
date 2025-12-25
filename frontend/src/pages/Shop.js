@@ -63,17 +63,25 @@ const Shop = () => {
     // Sort
     switch (sortBy) {
       case 'priceLowHigh':
-        products.sort((a, b) => a.price - b.price);
+        filtered.sort((a, b) => a.price - b.price);
         break;
       case 'priceHighLow':
-        products.sort((a, b) => b.price - a.price);
+        filtered.sort((a, b) => b.price - a.price);
         break;
       default:
         break;
     }
 
-    return products;
-  }, [searchQuery, priceFilter, sortBy]);
+    return filtered;
+  }, [products, searchQuery, priceFilter, sortBy]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-white">Loading products...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-black py-8 px-4">
