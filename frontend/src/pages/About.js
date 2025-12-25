@@ -78,31 +78,27 @@ const About = () => {
 
         <Card className="bg-gradient-to-br from-amber-500/10 to-amber-600/5 border-amber-500/30">
           <CardContent className="p-8 text-center">
-            <h3 className="text-2xl font-bold text-white mb-4">Why Choose Zaylux?</h3>
+            <h3 className="text-2xl font-bold text-white mb-4">{t('whyChoose')}</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
               <div className="flex items-start gap-3">
                 <div className="w-2 h-2 bg-amber-500 rounded-full mt-2 flex-shrink-0" />
-                <p className="text-gray-300">Authentic luxury products guaranteed</p>
+                <p className="text-gray-300">{t('whyReason1')}</p>
               </div>
               <div className="flex items-start gap-3">
                 <div className="w-2 h-2 bg-amber-500 rounded-full mt-2 flex-shrink-0" />
-                <p className="text-gray-300">Cash on Delivery across KSA</p>
+                <p className="text-gray-300">{t('whyReason2')}</p>
               </div>
               <div className="flex items-start gap-3">
                 <div className="w-2 h-2 bg-amber-500 rounded-full mt-2 flex-shrink-0" />
-                <p className="text-gray-300">Fast and secure delivery</p>
+                <p className="text-gray-300">{t('whyReason3')}</p>
               </div>
               <div className="flex items-start gap-3">
                 <div className="w-2 h-2 bg-amber-500 rounded-full mt-2 flex-shrink-0" />
-                <p className="text-gray-300">Competitive pricing and exclusive deals</p>
+                <p className="text-gray-300">{t('whyReason4')}</p>
               </div>
               <div className="flex items-start gap-3">
                 <div className="w-2 h-2 bg-amber-500 rounded-full mt-2 flex-shrink-0" />
-                <p className="text-gray-300">Bilingual customer support (EN/AR)</p>
-              </div>
-              <div className="flex items-start gap-3">
-                <div className="w-2 h-2 bg-amber-500 rounded-full mt-2 flex-shrink-0" />
-                <p className="text-gray-300">Easy returns and refunds</p>
+                <p className="text-gray-300">{t('whyReason5')}</p>
               </div>
             </div>
           </CardContent>
