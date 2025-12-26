@@ -12,11 +12,13 @@ export const translations = {
     about: 'About Us',
     contact: 'Contact',
     cart: 'Cart',
+    trackMyOrder: 'Track My Order',
     
     // Hero
     heroTitle: 'Luxury Redefined',
     heroSubtitle: 'Discover premium perfumes and cutting-edge drones',
     shopNow: 'Shop Now',
+    premiumQuality: 'Premium Quality Guaranteed',
     
     // Products
     addToCart: 'Add to Cart',
@@ -24,6 +26,17 @@ export const translations = {
     sar: 'SAR',
     inStock: 'In Stock',
     reviews: 'Reviews',
+    featuredProducts: 'Featured Products',
+    featuredProductsSubtitle: 'Discover our handpicked selection of premium perfumes and cutting-edge drones',
+    viewAllProducts: 'View All Products',
+    
+    // Trust / Benefits
+    cashOnDelivery: 'Cash on Delivery',
+    cashOnDeliveryDesc: 'Pay when you receive your order',
+    authenticProducts: 'Authentic Products',
+    authenticProductsDesc: '100% genuine luxury items',
+    fastDelivery: 'Fast Delivery',
+    fastDeliveryDesc: 'Express shipping across KSA',
     
     // Cart
     yourCart: 'Your Cart',
