@@ -95,9 +95,14 @@ class AdminAPI {
   }
 
   // Orders
-  async getOrders() {
+  async getOrders(confirmationStatus = null) {
+    const params = {};
+    if (confirmationStatus) {
+      params.confirmation_status = confirmationStatus;
+    }
     const response = await axios.get(`${API}/admin/orders`, {
-      headers: this.getHeaders()
+      headers: this.getHeaders(),
+      params
     });
     return response.data;
   }
