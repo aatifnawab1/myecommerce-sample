@@ -167,11 +167,19 @@ async def create_order(
 
 # ==================== WHATSAPP WEBHOOK ====================
 
-def normalize_phone(phone: str) -> str:
-    """Normalize phone number for matching - extract just the digits"""
-    # Remove whatsapp: prefix, +, spaces, dashes
+def normalize_phone_for_matching(phone: str) -> str:
+    """
+    Normalize phone number for database matching
+    Returns the last 9 digits (Saudi mobile numbers start with 5)
+    """
+    import re
+    # Remove whatsapp: prefix if present
     phone = phone.replace("whatsapp:", "").strip()
-    digits = ''.join(c for c in phone if c.isdigit())
+    # Extract only digits
+    digits = re.sub(r'\D', '', phone)
+    # Return last 9 digits for Saudi numbers
+    if len(digits) >= 9:
+        return digits[-9:]
     return digits
 
 @public_router.post("/whatsapp/webhook")
@@ -192,10 +200,10 @@ async def whatsapp_webhook(
         
         # Clean the phone number (remove 'whatsapp:' prefix)
         phone = from_number.replace("whatsapp:", "").strip()
-        phone_digits = normalize_phone(phone)
+        phone_last_9 = normalize_phone_for_matching(phone)
         
         print(f"Received WhatsApp from {phone}: {message_body}")
-        print(f"Normalized phone digits: {phone_digits}")
+        print(f"Normalized phone (last 9 digits): {phone_last_9}")
         
         if not phone or not message_body:
             return Response(content="", status_code=200)
@@ -204,34 +212,22 @@ async def whatsapp_webhook(
         confirmation_status = parse_confirmation_reply(message_body)
         
         # Find the most recent pending order for this phone number
-        # Try multiple matching strategies
+        # Match by last 9 digits to handle all phone formats
         order = None
         
-        # Strategy 1: Exact match
-        order = await db.orders.find_one(
-            {"phone": phone, "confirmation_status": "pending"},
-            {"_id": 0},
-            sort=[("created_at", -1)]
-        )
+        # Get all pending orders and match by last 9 digits
+        pending_orders = await db.orders.find(
+            {"confirmation_status": "pending"},
+            {"_id": 0}
+        ).sort("created_at", -1).to_list(100)
         
-        # Strategy 2: Match by last 9 digits (Saudi numbers without country code)
-        if not order and len(phone_digits) >= 9:
-            last_9_digits = phone_digits[-9:]
-            print(f"Trying match with last 9 digits: {last_9_digits}")
-            
-            # Find all pending orders and match manually
-            pending_orders = await db.orders.find(
-                {"confirmation_status": "pending"},
-                {"_id": 0}
-            ).sort("created_at", -1).to_list(100)
-            
-            for pending_order in pending_orders:
-                order_phone = normalize_phone(pending_order.get("phone", ""))
-                order_last_9 = order_phone[-9:] if len(order_phone) >= 9 else order_phone
-                if order_last_9 == last_9_digits:
-                    order = pending_order
-                    print(f"Matched order {pending_order.get('public_order_id')} with phone {pending_order.get('phone')}")
-                    break
+        for pending_order in pending_orders:
+            order_phone = pending_order.get("phone", "")
+            order_last_9 = normalize_phone_for_matching(order_phone)
+            if order_last_9 == phone_last_9:
+                order = pending_order
+                print(f"Matched order {pending_order.get('public_order_id')} with phone {order_phone} (last 9: {order_last_9})")
+                break
         
         if not order:
             print(f"No pending order found for phone: {phone}")
