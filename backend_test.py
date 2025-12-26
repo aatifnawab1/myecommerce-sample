@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Backend API Testing for Zaylux Store - Coupon Creation and Application Flow
-Tests the complete coupon workflow from creation to application during checkout.
+Backend API Testing for Zaylux Store - WhatsApp Order Confirmation Feature
+Tests the complete WhatsApp order confirmation workflow including webhook handling.
 """
 
 import requests
@@ -9,6 +9,7 @@ import json
 import os
 from datetime import datetime, timedelta
 from typing import Dict, Any
+import time
 
 # Load environment variables
 BACKEND_URL = "https://saudi-ecomm.preview.emergentagent.com/api"
