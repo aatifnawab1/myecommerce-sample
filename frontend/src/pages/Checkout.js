@@ -437,13 +437,13 @@ const Checkout = () => {
                   </div>
                   {couponApplied && (
                     <div className="flex justify-between text-green-500">
-                      <span>Discount ({couponApplied.discount_percentage}%)</span>
+                      <span>{language === 'ar' ? 'الخصم' : 'Discount'} ({couponApplied.discount_percentage}%)</span>
                       <span>-{discount.toFixed(2)} {t('sar')}</span>
                     </div>
                   )}
                   <div className="flex justify-between text-gray-400">
-                    <span>Delivery</span>
-                    <span className="text-green-500">FREE</span>
+                    <span>{language === 'ar' ? 'التوصيل' : 'Delivery'}</span>
+                    <span className="text-green-500">{language === 'ar' ? 'مجاني' : 'FREE'}</span>
                   </div>
                   <div className="flex justify-between text-xl font-bold pt-2">
                     <span className="text-white">{t('total')}</span>
