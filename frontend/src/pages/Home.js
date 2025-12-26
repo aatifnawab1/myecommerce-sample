@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, Sparkles, Package, Shield, Truck } from 'lucide-react';
+import { ArrowRight, Sparkles, Package, Shield, Truck, Tag, Percent } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
 import { useLanguage } from '../context/LanguageContext';
@@ -9,12 +9,14 @@ import publicAPI from '../services/publicAPI';
 
 const Home = () => {
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [products, setProducts] = useState([]);
+  const [coupons, setCoupons] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchProducts();
+    fetchCoupons();
   }, []);
 
   const fetchProducts = async () => {
@@ -25,6 +27,15 @@ const Home = () => {
       console.error('Error fetching products:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchCoupons = async () => {
+    try {
+      const data = await publicAPI.getActiveCoupons();
+      setCoupons(data);
+    } catch (error) {
+      console.error('Error fetching coupons:', error);
     }
   };
 
