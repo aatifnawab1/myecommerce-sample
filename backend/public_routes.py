@@ -12,6 +12,7 @@ from models import (
 from whatsapp_service import (
     send_order_confirmation_request,
     send_confirmation_status_message,
+    send_guidance_message,
     parse_confirmation_reply,
     format_phone_for_whatsapp
 )
