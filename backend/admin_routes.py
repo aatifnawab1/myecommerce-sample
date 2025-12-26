@@ -213,11 +213,17 @@ async def get_product_notify_requests(
 
 @admin_router.get("/orders", response_model=List[Order])
 async def get_all_orders(
+    confirmation_status: str = None,
     admin: dict = Depends(verify_admin_token),
     db: AsyncIOMotorDatabase = Depends(get_db)
 ):
-    """Get all orders"""
-    orders = await db.orders.find({}, {"_id": 0}).sort("created_at", -1).to_list(1000)
+    """Get all orders with optional confirmation_status filter"""
+    query = {}
+    if confirmation_status and confirmation_status in ["pending", "confirmed", "cancelled"]:
+        query["confirmation_status"] = confirmation_status
+    
+    orders = await db.orders.find(query, {"_id": 0}).sort("created_at", -1).to_list(1000)
+    return orders
     return orders
 
 @admin_router.get("/orders/{order_id}", response_model=Order)
