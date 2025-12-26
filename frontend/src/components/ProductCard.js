@@ -20,7 +20,7 @@ const getImageUrl = (imageUrl) => {
 const ProductCard = ({ product }) => {
   const navigate = useNavigate();
   const { t, language } = useLanguage();
-  const { addToCart, getCartCount } = useCart();
+  const { addToCart } = useCart();
 
   const isInStock = product.quantity > 0;
   const productImage = product.images?.[0] || product.image || '';
