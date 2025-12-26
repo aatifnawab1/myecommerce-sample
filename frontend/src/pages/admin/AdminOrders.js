@@ -195,6 +195,15 @@ const AdminOrders = () => {
                       <Eye className="h-4 w-4 mr-2" />
                       View Details
                     </Button>
+                    <Button
+                      size="sm"
+                      variant="destructive"
+                      onClick={() => handleDeleteClick(order)}
+                      className="bg-red-500 hover:bg-red-600 text-white"
+                    >
+                      <Trash2 className="h-4 w-4 mr-2" />
+                      Delete
+                    </Button>
                   </div>
                 </div>
               </CardContent>
