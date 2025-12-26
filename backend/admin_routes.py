@@ -266,6 +266,34 @@ async def update_order_status(
     
     return {"message": "Order status updated successfully"}
 
+@admin_router.delete("/orders/{order_id}")
+async def delete_order(
+    order_id: str,
+    admin: dict = Depends(verify_admin_token),
+    db: AsyncIOMotorDatabase = Depends(get_db)
+):
+    """Delete an order"""
+    # Find the order first to restore stock if needed
+    order = await db.orders.find_one({"id": order_id}, {"_id": 0})
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+    
+    # Restore product quantities if order was not cancelled
+    if order.get("status") != "Cancelled":
+        for item in order.get("items", []):
+            await db.products.update_one(
+                {"id": item.get("product_id")},
+                {"$inc": {"quantity": item.get("quantity", 0)}}
+            )
+    
+    # Delete the order
+    result = await db.orders.delete_one({"id": order_id})
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Order not found")
+    
+    return {"message": "Order deleted successfully"}
+
 # ==================== CUSTOMER MANAGEMENT ====================
 
 @admin_router.get("/customers")
