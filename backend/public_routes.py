@@ -131,9 +131,10 @@ async def create_order(
     # Generate public order ID
     public_order_id = await generate_public_order_id(db)
     
-    # Create order with public ID
+    # Create order with public ID and pending confirmation status
     order_dict = order_data.model_dump()
     order_dict["public_order_id"] = public_order_id
+    order_dict["confirmation_status"] = "pending"  # WhatsApp confirmation pending
     order = Order(**order_dict)
     await db.orders.insert_one(order.model_dump())
     
@@ -144,7 +145,128 @@ async def create_order(
             {"$inc": {"quantity": -item.quantity}}
         )
     
+    # Send WhatsApp confirmation request (async, don't block order creation)
+    try:
+        whatsapp_result = send_order_confirmation_request(
+            phone=order.phone,
+            order_id=public_order_id,
+            customer_name=order.customer_name,
+            total=order.total,
+            language='en'  # Default to English, can be enhanced to detect language
+        )
+        if whatsapp_result.get("success"):
+            print(f"WhatsApp confirmation sent for order {public_order_id}")
+        else:
+            print(f"WhatsApp send failed for order {public_order_id}: {whatsapp_result.get('error')}")
+    except Exception as e:
+        # Don't fail order creation if WhatsApp fails
+        print(f"WhatsApp error for order {public_order_id}: {str(e)}")
+    
     return order
+
+# ==================== WHATSAPP WEBHOOK ====================
+
+@public_router.post("/whatsapp/webhook")
+async def whatsapp_webhook(
+    request: Request,
+    db: AsyncIOMotorDatabase = Depends(get_db)
+):
+    """
+    Handle incoming WhatsApp messages from Twilio webhook
+    Twilio sends form data with message details
+    """
+    try:
+        form_data = await request.form()
+        
+        # Extract message details from Twilio webhook
+        from_number = form_data.get("From", "")  # Format: whatsapp:+966501234567
+        message_body = form_data.get("Body", "")
+        
+        # Clean the phone number (remove 'whatsapp:' prefix)
+        phone = from_number.replace("whatsapp:", "").strip()
+        
+        print(f"Received WhatsApp from {phone}: {message_body}")
+        
+        if not phone or not message_body:
+            return Response(content="", status_code=200)
+        
+        # Parse the reply
+        confirmation_status = parse_confirmation_reply(message_body)
+        
+        if not confirmation_status:
+            # Could not determine intent - ignore or send help message
+            print(f"Could not parse reply from {phone}: {message_body}")
+            return Response(content="", status_code=200)
+        
+        # Find the most recent pending order for this phone number
+        order = await db.orders.find_one(
+            {
+                "phone": {"$regex": phone.replace("+", "\\+?")},
+                "confirmation_status": "pending"
+            },
+            {"_id": 0},
+            sort=[("created_at", -1)]  # Get most recent
+        )
+        
+        if not order:
+            # Try without the + sign
+            clean_phone = phone.lstrip('+')
+            order = await db.orders.find_one(
+                {
+                    "phone": {"$regex": f"\\+?{clean_phone}$"},
+                    "confirmation_status": "pending"
+                },
+                {"_id": 0},
+                sort=[("created_at", -1)]
+            )
+        
+        if not order:
+            print(f"No pending order found for phone: {phone}")
+            return Response(content="", status_code=200)
+        
+        # Update order confirmation status
+        new_status = confirmation_status
+        order_status = "Confirmed" if confirmation_status == "confirmed" else "Cancelled"
+        
+        await db.orders.update_one(
+            {"id": order["id"]},
+            {
+                "$set": {
+                    "confirmation_status": new_status,
+                    "status": order_status,
+                    "updated_at": datetime.utcnow()
+                }
+            }
+        )
+        
+        print(f"Order {order['public_order_id']} updated to {new_status}")
+        
+        # If cancelled, restore product quantities
+        if confirmation_status == "cancelled":
+            for item in order.get("items", []):
+                await db.products.update_one(
+                    {"id": item["product_id"]},
+                    {"$inc": {"quantity": item["quantity"]}}
+                )
+            print(f"Stock restored for cancelled order {order['public_order_id']}")
+        
+        # Send confirmation message to customer
+        try:
+            send_confirmation_status_message(
+                phone=phone,
+                order_id=order["public_order_id"],
+                status=new_status,
+                language='en'
+            )
+        except Exception as e:
+            print(f"Failed to send confirmation message: {str(e)}")
+        
+        # Return empty response (Twilio expects 200 OK)
+        return Response(content="", status_code=200)
+        
+    except Exception as e:
+        print(f"Webhook error: {str(e)}")
+        return Response(content="", status_code=200)
 
 # ==================== ORDER TRACKING ====================
 
