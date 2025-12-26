@@ -5,6 +5,9 @@ import os
 from twilio.rest import Client
 from typing import Optional
 
+# Twilio WhatsApp Sandbox number
+WHATSAPP_SANDBOX_NUMBER = "whatsapp:+14155238886"
+
 # Initialize Twilio client
 def get_twilio_client() -> Optional[Client]:
     """Get Twilio client if credentials are configured"""
@@ -43,46 +46,39 @@ def send_order_confirmation_request(
 ) -> dict:
     """
     Send WhatsApp message asking customer to confirm order
+    Uses Twilio WhatsApp Sandbox for testing
     Returns: dict with success status and message_sid
     """
     client = get_twilio_client()
     if not client:
         return {"success": False, "error": "Twilio not configured"}
     
-    whatsapp_number = os.environ.get('TWILIO_WHATSAPP_NUMBER')
-    if not whatsapp_number:
-        return {"success": False, "error": "WhatsApp number not configured"}
-    
-    from_number = f"whatsapp:{whatsapp_number}"
+    # Use sandbox number as sender
+    from_number = WHATSAPP_SANDBOX_NUMBER
     to_number = format_phone_for_whatsapp(phone)
     
-    # Bilingual message
-    if language == 'ar':
-        message_body = f"""مرحباً {customer_name}! 🛍️
+    # Message with clear YES/NO instructions
+    # Using simple format that works with WhatsApp sandbox
+    message_body = f"""🛍️ *Zaylux Store - Order Confirmation*
 
-شكراً لطلبك من Zaylux Store.
+Hello {customer_name}!
 
-رقم الطلب: {order_id}
-المبلغ الإجمالي: {total:.2f} ريال
+Your order has been received.
 
-للتأكيد، يرجى الرد بـ:
-✅ نعم - لتأكيد الطلب
-❌ لا - لإلغاء الطلب
+📦 *Order ID:* {order_id}
+💰 *Total:* {total:.2f} SAR
+💳 *Payment:* Cash on Delivery
 
-سيتم الدفع عند الاستلام."""
-    else:
-        message_body = f"""Hello {customer_name}! 🛍️
+━━━━━━━━━━━━━━━━━━━━
+*Please confirm your order:*
 
-Thank you for your order from Zaylux Store.
+Reply *YES* to confirm ✅
+Reply *NO* to cancel ❌
+━━━━━━━━━━━━━━━━━━━━
 
-Order ID: {order_id}
-Total Amount: {total:.2f} SAR
-
-To confirm, please reply with:
-✅ YES - to confirm your order
-❌ NO - to cancel your order
-
-Payment will be collected on delivery."""
+مرحباً! للتأكيد بالعربي:
+رد بـ *نعم* للتأكيد ✅
+رد بـ *لا* للإلغاء ❌"""
     
     try:
         message = client.messages.create(
@@ -90,6 +86,7 @@ Payment will be collected on delivery."""
             from_=from_number,
             to=to_number
         )
+        print(f"WhatsApp message sent: SID={message.sid}, Status={message.status}")
         return {
             "success": True,
             "message_sid": message.sid,
@@ -115,42 +112,35 @@ def send_confirmation_status_message(
     if not client:
         return {"success": False, "error": "Twilio not configured"}
     
-    whatsapp_number = os.environ.get('TWILIO_WHATSAPP_NUMBER')
-    if not whatsapp_number:
-        return {"success": False, "error": "WhatsApp number not configured"}
-    
-    from_number = f"whatsapp:{whatsapp_number}"
+    from_number = WHATSAPP_SANDBOX_NUMBER
     to_number = format_phone_for_whatsapp(phone)
     
     if status == "confirmed":
-        if language == 'ar':
-            message_body = f"""✅ تم تأكيد طلبك!
+        message_body = f"""✅ *Order Confirmed!*
 
-رقم الطلب: {order_id}
+Order ID: {order_id}
 
-سنقوم بتوصيل طلبك قريباً.
+Your order has been confirmed and will be delivered soon.
+
+Thank you for shopping with Zaylux Store! 🎉
+
+━━━━━━━━━━━━━━━━━━━━
+تم تأكيد طلبك!
+سيتم توصيل طلبك قريباً.
 شكراً لتسوقك من Zaylux Store! 🎉"""
-        else:
-            message_body = f"""✅ Your order has been confirmed!
-
-Order ID: {order_id}
-
-We will deliver your order soon.
-Thank you for shopping with Zaylux Store! 🎉"""
     else:  # cancelled
-        if language == 'ar':
-            message_body = f"""❌ تم إلغاء طلبك.
-
-رقم الطلب: {order_id}
-
-نأمل أن نخدمك في المستقبل.
-Zaylux Store"""
-        else:
-            message_body = f"""❌ Your order has been cancelled.
+        message_body = f"""❌ *Order Cancelled*
 
 Order ID: {order_id}
 
-We hope to serve you in the future.
+Your order has been cancelled as requested.
+
+We hope to serve you again soon.
+Zaylux Store
+
+━━━━━━━━━━━━━━━━━━━━
+تم إلغاء طلبك.
+نأمل أن نخدمك في المستقبل.
 Zaylux Store"""
     
     try:
@@ -177,13 +167,13 @@ def parse_confirmation_reply(message_body: str) -> Optional[str]:
     message_lower = message_body.strip().lower()
     
     # Check for YES responses (English and Arabic)
-    yes_responses = ['yes', 'y', 'نعم', 'اي', 'ايه', 'اوكي', 'ok', 'okay', 'confirm', 'تأكيد']
+    yes_responses = ['yes', 'y', 'نعم', 'اي', 'ايه', 'اوكي', 'ok', 'okay', 'confirm', 'تأكيد', 'أكد', 'موافق']
     for yes in yes_responses:
         if yes in message_lower:
             return 'confirmed'
     
     # Check for NO responses (English and Arabic)
-    no_responses = ['no', 'n', 'لا', 'cancel', 'الغاء', 'إلغاء']
+    no_responses = ['no', 'n', 'لا', 'cancel', 'الغاء', 'إلغاء', 'لأ', 'كنسل']
     for no in no_responses:
         if no in message_lower:
             return 'cancelled'
