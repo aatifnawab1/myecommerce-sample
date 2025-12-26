@@ -123,6 +123,14 @@ class AdminAPI {
     return response.data;
   }
 
+  async deleteOrder(orderId) {
+    const response = await axios.delete(
+      `${API}/admin/orders/${orderId}`,
+      { headers: this.getHeaders() }
+    );
+    return response.data;
+  }
+
   // Customers
   async getCustomers() {
     const response = await axios.get(`${API}/admin/customers`, {
