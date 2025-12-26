@@ -70,6 +70,32 @@ const AdminOrders = () => {
     return colors[status] || 'text-gray-500';
   };
 
+  const getConfirmationStatusBadge = (status) => {
+    switch (status) {
+      case 'confirmed':
+        return (
+          <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-green-500/10 text-green-500 text-xs">
+            <CheckCircle className="h-3 w-3" />
+            Confirmed
+          </span>
+        );
+      case 'cancelled':
+        return (
+          <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-red-500/10 text-red-500 text-xs">
+            <XCircle className="h-3 w-3" />
+            Cancelled
+          </span>
+        );
+      default:
+        return (
+          <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-yellow-500/10 text-yellow-500 text-xs">
+            <Clock className="h-3 w-3" />
+            Awaiting
+          </span>
+        );
+    }
+  };
+
   if (loading) {
     return <div className="text-white">Loading orders...</div>;
   }
