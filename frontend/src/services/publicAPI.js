@@ -40,6 +40,12 @@ class PublicAPI {
     return response.data;
   }
 
+  // Get active coupons for display
+  async getActiveCoupons() {
+    const response = await axios.get(`${API}/coupons/active`);
+    return response.data;
+  }
+
   // Order Tracking
   async trackOrder(orderId, phone) {
     const response = await axios.post(`${API}/orders/track`, {
