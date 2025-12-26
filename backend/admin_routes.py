@@ -220,7 +220,14 @@ async def get_all_orders(
     """Get all orders with optional confirmation_status filter"""
     query = {}
     if confirmation_status and confirmation_status in ["pending", "confirmed", "cancelled"]:
-        query["confirmation_status"] = confirmation_status
+        if confirmation_status == "pending":
+            # For pending, include orders without confirmation_status field (they default to pending)
+            query = {"$or": [
+                {"confirmation_status": "pending"},
+                {"confirmation_status": {"$exists": False}}
+            ]}
+        else:
+            query["confirmation_status"] = confirmation_status
     
     orders = await db.orders.find(query, {"_id": 0}).sort("created_at", -1).to_list(1000)
     return orders
