@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Package, MapPin, Phone, User, CheckCircle, Copy, Search } from 'lucide-react';
+import { Package, MapPin, Phone, User, CheckCircle, Copy, Search, Tag, Percent } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
 import { Input } from '../components/ui/input';
@@ -35,6 +35,20 @@ const Checkout = () => {
   const [validatingCoupon, setValidatingCoupon] = useState(false);
   const [publicOrderId, setPublicOrderId] = useState(null);
   const [orderPlaced, setOrderPlaced] = useState(false);
+  const [availableCoupons, setAvailableCoupons] = useState([]);
+
+  useEffect(() => {
+    fetchAvailableCoupons();
+  }, []);
+
+  const fetchAvailableCoupons = async () => {
+    try {
+      const data = await publicAPI.getActiveCoupons();
+      setAvailableCoupons(data);
+    } catch (error) {
+      console.error('Error fetching coupons:', error);
+    }
+  };
 
   if (cartItems.length === 0 && !orderPlaced) {
     navigate('/cart');
