@@ -326,30 +326,108 @@ const Checkout = () => {
                 </div>
 
                 <div className="border-t border-zinc-700 pt-4 space-y-2">
+                  {/* Available Coupons */}
+                  {availableCoupons.length > 0 && !couponApplied && (
+                    <div className="mb-4 pb-4 border-b border-zinc-700">
+                      <Label className="text-white mb-3 block flex items-center gap-2">
+                        <Tag className="h-4 w-4 text-green-500" />
+                        {t('availableCoupons')}
+                      </Label>
+                      <div className="space-y-2">
+                        {availableCoupons.map((coupon, index) => {
+                          const meetsMinOrder = !coupon.min_order_value || getCartTotal() >= coupon.min_order_value;
+                          return (
+                            <div 
+                              key={index} 
+                              className={`flex items-center justify-between p-3 rounded-lg border ${
+                                meetsMinOrder 
+                                  ? 'bg-green-500/5 border-green-500/30' 
+                                  : 'bg-zinc-800/50 border-zinc-700 opacity-60'
+                              }`}
+                            >
+                              <div className="flex items-center gap-3">
+                                <div className="flex items-center justify-center w-10 h-10 rounded-full bg-green-500/20">
+                                  <Percent className="h-5 w-5 text-green-500" />
+                                </div>
+                                <div>
+                                  <span className="text-amber-500 font-mono font-bold">{coupon.code}</span>
+                                  <p className="text-xs text-gray-400">
+                                    {coupon.discount_percentage}{t('percentOff')}
+                                    {coupon.min_order_value && (
+                                      <span className="ml-2">
+                                        ({t('minOrder')}: {coupon.min_order_value} {t('sar')})
+                                      </span>
+                                    )}
+                                  </p>
+                                </div>
+                              </div>
+                              <Button
+                                type="button"
+                                size="sm"
+                                onClick={() => handleApplyCoupon(coupon.code)}
+                                disabled={!meetsMinOrder || validatingCoupon}
+                                className={`${
+                                  meetsMinOrder 
+                                    ? 'bg-green-600 hover:bg-green-700 text-white' 
+                                    : 'bg-zinc-700 text-gray-400 cursor-not-allowed'
+                                } font-semibold`}
+                              >
+                                {t('applyCoupon')}
+                              </Button>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+
                   {/* Coupon Input */}
                   <div className="mb-4 pb-4 border-b border-zinc-700">
-                    <Label className="text-white mb-2 block">Coupon Code</Label>
+                    <Label className="text-white mb-2 block">
+                      {language === 'ar' ? 'رمز الكوبون' : 'Coupon Code'}
+                    </Label>
                     <div className="flex gap-2">
                       <Input
                         name="couponCode"
                         value={formData.couponCode}
                         onChange={handleInputChange}
-                        placeholder="Enter coupon code"
-                        className="bg-zinc-800 border-zinc-700 text-white"
+                        placeholder={language === 'ar' ? 'أدخل رمز الكوبون' : 'Enter coupon code'}
+                        className={`bg-zinc-800 border-zinc-700 text-white uppercase ${
+                          couponApplied ? 'border-green-500' : ''
+                        }`}
+                        disabled={couponApplied}
                       />
-                      <Button
-                        type="button"
-                        onClick={handleApplyCoupon}
-                        disabled={validatingCoupon}
-                        className="bg-amber-500 hover:bg-amber-600 text-black font-semibold"
-                      >
-                        {validatingCoupon ? 'Validating...' : 'Apply'}
-                      </Button>
+                      {couponApplied ? (
+                        <Button
+                          type="button"
+                          onClick={() => {
+                            setCouponApplied(null);
+                            setFormData(prev => ({ ...prev, couponCode: '' }));
+                          }}
+                          className="bg-red-500 hover:bg-red-600 text-white font-semibold"
+                        >
+                          {language === 'ar' ? 'إزالة' : 'Remove'}
+                        </Button>
+                      ) : (
+                        <Button
+                          type="button"
+                          onClick={() => handleApplyCoupon()}
+                          disabled={validatingCoupon}
+                          className="bg-amber-500 hover:bg-amber-600 text-black font-semibold"
+                        >
+                          {validatingCoupon 
+                            ? (language === 'ar' ? 'جاري التحقق...' : 'Validating...') 
+                            : t('applyCoupon')}
+                        </Button>
+                      )}
                     </div>
                     {couponApplied && (
-                      <p className="text-green-500 text-sm mt-2">
-                        ✓ Coupon applied: {couponApplied.discount_percentage}% off
-                      </p>
+                      <div className="flex items-center gap-2 mt-2 text-green-500 text-sm">
+                        <CheckCircle className="h-4 w-4" />
+                        <span>
+                          {t('couponApplied')} {couponApplied.discount_percentage}{t('percentOff')}
+                        </span>
+                      </div>
                     )}
                   </div>
 
