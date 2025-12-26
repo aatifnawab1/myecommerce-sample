@@ -2,6 +2,7 @@
 WhatsApp Service for Order Confirmation via Twilio
 """
 import os
+import re
 from twilio.rest import Client
 from typing import Optional
 
@@ -20,22 +21,64 @@ def get_twilio_client() -> Optional[Client]:
     
     return Client(account_sid, auth_token)
 
+def normalize_saudi_phone(phone: str) -> str:
+    """
+    Normalize Saudi phone number to international format +966XXXXXXXXX
+    
+    Handles all these formats:
+    - +966506744374 -> +966506744374
+    - 966506744374  -> +966506744374
+    - 0506744374    -> +966506744374
+    - 506744374     -> +966506744374
+    - 00966506744374 -> +966506744374
+    - +966 50 674 4374 -> +966506744374
+    """
+    if not phone:
+        return ""
+    
+    # Remove all non-digit characters except +
+    phone = re.sub(r'[^\d+]', '', phone)
+    
+    # Remove leading + for processing
+    has_plus = phone.startswith('+')
+    if has_plus:
+        phone = phone[1:]
+    
+    # Remove leading zeros (00966 -> 966)
+    phone = phone.lstrip('0')
+    
+    # Now we have digits only, determine the format
+    # Saudi mobile numbers are 9 digits starting with 5
+    # Full format with country code is 12 digits: 966XXXXXXXXX
+    
+    if phone.startswith('966'):
+        # Already has country code: 966506744374
+        phone = '+' + phone
+    elif len(phone) == 9 and phone.startswith('5'):
+        # 9 digits starting with 5: 506744374
+        phone = '+966' + phone
+    elif len(phone) == 10 and phone.startswith('05'):
+        # This shouldn't happen after lstrip('0') but just in case
+        phone = '+966' + phone[1:]
+    else:
+        # Unknown format, try to add +966 if it looks like a Saudi number
+        if len(phone) >= 9:
+            # Take the last 9 digits if they start with 5
+            last_9 = phone[-9:]
+            if last_9.startswith('5'):
+                phone = '+966' + last_9
+            else:
+                phone = '+' + phone  # Keep as is with + prefix
+        else:
+            phone = '+966' + phone  # Assume Saudi
+    
+    print(f"Normalized phone: {phone}")
+    return phone
+
 def format_phone_for_whatsapp(phone: str) -> str:
     """Format phone number for WhatsApp (must include country code)"""
-    # Remove any spaces, dashes, or parentheses
-    phone = ''.join(c for c in phone if c.isdigit() or c == '+')
-    
-    # Ensure it starts with +
-    if not phone.startswith('+'):
-        # Assume Saudi Arabia if no country code
-        if phone.startswith('0'):
-            phone = '+966' + phone[1:]
-        elif phone.startswith('966'):
-            phone = '+' + phone
-        else:
-            phone = '+966' + phone
-    
-    return f"whatsapp:{phone}"
+    normalized = normalize_saudi_phone(phone)
+    return f"whatsapp:{normalized}"
 
 def send_order_confirmation_request(
     phone: str,
