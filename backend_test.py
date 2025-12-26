@@ -467,4 +467,28 @@ class ZayluxBackendTester:
 
 if __name__ == "__main__":
     tester = ZayluxBackendTester()
-    tester.run_all_tests()
+    success = tester.run_whatsapp_tests()
+    
+    if not success:
+        print("\n" + "=" * 70)
+        print("🔍 DEBUGGING INFORMATION")
+        print("=" * 70)
+        print("If tests are failing, check:")
+        print("1. Backend service is running (supervisor status)")
+        print("2. MongoDB is accessible")
+        print("3. Twilio credentials are configured in backend/.env")
+        print("4. Products exist in database for order creation")
+        print("5. Admin user exists (admin/admin123)")
+        
+        # Check backend logs
+        print("\n📋 Recent backend logs:")
+        import subprocess
+        try:
+            result = subprocess.run(
+                ["tail", "-n", "20", "/var/log/supervisor/backend.err.log"],
+                capture_output=True, text=True, timeout=5
+            )
+            if result.stdout:
+                print(result.stdout)
+        except:
+            print("Could not retrieve backend logs")
