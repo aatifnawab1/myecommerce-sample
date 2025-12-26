@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ShoppingCart, Menu, X, Sparkles } from 'lucide-react';
+import { ShoppingCart, Menu, X, Sparkles, Search } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useCart } from '../context/CartContext';
 import { Button } from './ui/button';
@@ -53,7 +53,21 @@ const Header = () => {
           </nav>
 
           {/* Right Actions */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
+            {/* Track My Order Button */}
+            <Link to="/track-order" className="hidden sm:block">
+              <Button
+                variant="ghost"
+                size="sm"
+                className={`text-sm font-medium hover:bg-amber-500/10 hover:text-amber-500 ${
+                  isActive('/track-order') ? 'text-amber-500' : 'text-white'
+                }`}
+              >
+                <Search className={`h-4 w-4 ${language === 'ar' ? 'ml-2' : 'mr-2'}`} />
+                {t('trackMyOrder')}
+              </Button>
+            </Link>
+
             {/* Language Toggle */}
             <button
               onClick={toggleLanguage}
@@ -104,6 +118,17 @@ const Header = () => {
                   {link.label}
                 </Link>
               ))}
+              {/* Track My Order - Mobile */}
+              <Link
+                to="/track-order"
+                onClick={() => setMobileMenuOpen(false)}
+                className={`text-sm font-medium transition-colors hover:text-amber-500 px-2 py-1 flex items-center gap-2 ${
+                  isActive('/track-order') ? 'text-amber-500' : 'text-white'
+                }`}
+              >
+                <Search className="h-4 w-4" />
+                {t('trackMyOrder')}
+              </Link>
             </div>
           </nav>
         )}
