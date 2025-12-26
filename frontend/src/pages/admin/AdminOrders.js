@@ -10,7 +10,7 @@ import {
   DialogTitle,
 } from '../../components/ui/dialog';
 import { Card, CardContent } from '../../components/ui/card';
-import { Eye, MessageSquare, CheckCircle, XCircle, Clock } from 'lucide-react';
+import { Eye, MessageSquare, CheckCircle, XCircle, Clock, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 const AdminOrders = () => {
@@ -19,6 +19,8 @@ const AdminOrders = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [confirmationFilter, setConfirmationFilter] = useState('all');
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [orderToDelete, setOrderToDelete] = useState(null);
 
   useEffect(() => {
     fetchOrders();
@@ -43,6 +45,25 @@ const AdminOrders = () => {
       setDialogOpen(true);
     } catch (error) {
       toast.error('Failed to fetch order details');
+    }
+  };
+
+  const handleDeleteClick = (order) => {
+    setOrderToDelete(order);
+    setDeleteConfirmOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!orderToDelete) return;
+    
+    try {
+      await adminAPI.deleteOrder(orderToDelete.id);
+      toast.success(`Order ${orderToDelete.public_order_id || orderToDelete.id.substring(0, 8)} deleted successfully`);
+      setDeleteConfirmOpen(false);
+      setOrderToDelete(null);
+      fetchOrders();
+    } catch (error) {
+      toast.error('Failed to delete order');
     }
   };
 
