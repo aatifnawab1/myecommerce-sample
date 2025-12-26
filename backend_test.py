@@ -319,6 +319,12 @@ class ZayluxBackendTester:
             
             all_orders = response.json()
             
+            # Count orders that actually have confirmation_status field
+            orders_with_confirmation = [o for o in all_orders if 'confirmation_status' in o]
+            pending_count = len([o for o in orders_with_confirmation if o.get("confirmation_status") == "pending"])
+            confirmed_count = len([o for o in orders_with_confirmation if o.get("confirmation_status") == "confirmed"])
+            cancelled_count = len([o for o in orders_with_confirmation if o.get("confirmation_status") == "cancelled"])
+            
             # Test filter by "pending"
             response = requests.get(
                 f"{self.base_url}/admin/orders?confirmation_status=pending",
@@ -355,11 +361,7 @@ class ZayluxBackendTester:
             
             cancelled_orders = response.json()
             
-            # Verify filtering works
-            pending_count = len([o for o in all_orders if o.get("confirmation_status") == "pending"])
-            confirmed_count = len([o for o in all_orders if o.get("confirmation_status") == "confirmed"])
-            cancelled_count = len([o for o in all_orders if o.get("confirmation_status") == "cancelled"])
-            
+            # Verify filtering works correctly
             filter_success = (
                 len(pending_orders) == pending_count and
                 len(confirmed_orders) == confirmed_count and
@@ -368,11 +370,11 @@ class ZayluxBackendTester:
             
             if filter_success:
                 self.log_test("Admin Orders Filter", True, 
-                            f"Filters work: pending={len(pending_orders)}, confirmed={len(confirmed_orders)}, cancelled={len(cancelled_orders)}")
+                            f"Filters work correctly: pending={len(pending_orders)}, confirmed={len(confirmed_orders)}, cancelled={len(cancelled_orders)}")
                 return True
             else:
                 self.log_test("Admin Orders Filter", False, 
-                            f"Filter mismatch: expected pending={pending_count}, got={len(pending_orders)}")
+                            f"Filter mismatch: expected pending={pending_count}, got={len(pending_orders)}; expected confirmed={confirmed_count}, got={len(confirmed_orders)}; expected cancelled={cancelled_count}, got={len(cancelled_orders)}")
                 return False
                 
         except Exception as e:
