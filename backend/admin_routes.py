@@ -224,7 +224,6 @@ async def get_all_orders(
     
     orders = await db.orders.find(query, {"_id": 0}).sort("created_at", -1).to_list(1000)
     return orders
-    return orders
 
 @admin_router.get("/orders/{order_id}", response_model=Order)
 async def get_order(
