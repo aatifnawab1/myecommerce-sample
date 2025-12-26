@@ -453,7 +453,9 @@ const Checkout = () => {
 
                 <div className="mt-6 p-4 bg-amber-500/10 border border-amber-500/30 rounded-md">
                   <p className="text-sm text-amber-500 font-medium">
-                    Payment method: Cash on Delivery (COD)
+                    {language === 'ar' 
+                      ? 'طريقة الدفع: الدفع عند الاستلام' 
+                      : 'Payment method: Cash on Delivery (COD)'}
                   </p>
                 </div>
               </CardContent>
