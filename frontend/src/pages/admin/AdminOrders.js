@@ -193,11 +193,24 @@ const AdminOrders = () => {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <p className="text-sm text-gray-400">Order ID</p>
-                  <p className="text-white font-mono">{selectedOrder.id}</p>
+                  <p className="text-amber-500 font-bold">{selectedOrder.public_order_id || selectedOrder.id}</p>
                 </div>
                 <div>
                   <p className="text-sm text-gray-400">Order Date</p>
                   <p className="text-white">{new Date(selectedOrder.created_at).toLocaleString()}</p>
+                </div>
+              </div>
+
+              {/* WhatsApp Confirmation Status */}
+              <div className="bg-zinc-800 rounded-lg p-4">
+                <div className="flex items-center gap-3">
+                  <MessageSquare className="h-5 w-5 text-green-500" />
+                  <div>
+                    <p className="text-sm text-gray-400">WhatsApp Confirmation</p>
+                    <div className="mt-1">
+                      {getConfirmationStatusBadge(selectedOrder.confirmation_status)}
+                    </div>
+                  </div>
                 </div>
               </div>
 
