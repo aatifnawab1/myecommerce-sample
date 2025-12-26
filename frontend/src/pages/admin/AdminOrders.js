@@ -320,6 +320,48 @@ const AdminOrders = () => {
           )}
         </DialogContent>
       </Dialog>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
+        <DialogContent className="bg-zinc-900 border-zinc-800 text-white max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-white">Delete Order</DialogTitle>
+          </DialogHeader>
+          
+          <div className="space-y-4">
+            <p className="text-gray-300">
+              Are you sure you want to delete order{' '}
+              <span className="text-amber-500 font-bold">
+                {orderToDelete?.public_order_id || orderToDelete?.id?.substring(0, 8)}
+              </span>
+              ?
+            </p>
+            <p className="text-gray-400 text-sm">
+              This action cannot be undone. If the order was not cancelled, the product stock will be restored.
+            </p>
+            
+            <div className="flex gap-3 justify-end">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setDeleteConfirmOpen(false);
+                  setOrderToDelete(null);
+                }}
+                className="border-zinc-700 text-gray-400 hover:text-white hover:bg-zinc-800"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleDeleteConfirm}
+                className="bg-red-500 hover:bg-red-600 text-white"
+              >
+                <Trash2 className="h-4 w-4 mr-2" />
+                Delete Order
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
