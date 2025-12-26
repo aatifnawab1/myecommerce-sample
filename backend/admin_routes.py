@@ -179,6 +179,7 @@ async def get_notify_requests(
     db: AsyncIOMotorDatabase = Depends(get_db)
 ):
     """Get all notify requests grouped by product"""
+    # Use $lookup to join product details in a single query (optimized, no N+1)
     pipeline = [
         {
             "$group": {
@@ -186,17 +187,30 @@ async def get_notify_requests(
                 "count": {"$sum": 1},
                 "requests": {"$push": {"phone": "$phone", "name": "$name", "created_at": "$created_at"}}
             }
+        },
+        {
+            "$lookup": {
+                "from": "products",
+                "localField": "_id",
+                "foreignField": "id",
+                "as": "product"
+            }
+        },
+        {
+            "$unwind": {"path": "$product", "preserveNullAndEmptyArrays": True}
+        },
+        {
+            "$project": {
+                "_id": 1,
+                "count": 1,
+                "requests": 1,
+                "product_name_en": {"$ifNull": ["$product.name_en", "Unknown"]},
+                "product_name_ar": {"$ifNull": ["$product.name_ar", "غير معروف"]}
+            }
         }
     ]
     
     results = await db.notify_requests.aggregate(pipeline).to_list(1000)
-    
-    # Enrich with product details
-    for result in results:
-        product = await db.products.find_one({"id": result["_id"]}, {"_id": 0, "name_en": 1, "name_ar": 1})
-        result["product_name_en"] = product.get("name_en", "Unknown") if product else "Unknown"
-        result["product_name_ar"] = product.get("name_ar", "غير معروف") if product else "غير معروف"
-    
     return results
 
 @admin_router.get("/notify-requests/{product_id}")
