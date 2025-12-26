@@ -222,7 +222,12 @@ async def get_all_orders(
     if confirmation_status and confirmation_status in ["pending", "confirmed", "cancelled"]:
         query["confirmation_status"] = confirmation_status
     
+    print(f"DEBUG: confirmation_status parameter: {confirmation_status}")
+    print(f"DEBUG: MongoDB query: {query}")
+    
     orders = await db.orders.find(query, {"_id": 0}).sort("created_at", -1).to_list(1000)
+    print(f"DEBUG: Found {len(orders)} orders")
+    
     return orders
 
 @admin_router.get("/orders/{order_id}", response_model=Order)
