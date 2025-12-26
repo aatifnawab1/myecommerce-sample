@@ -208,7 +208,7 @@ To confirm or cancel your order, please reply with:
 
 *Zaylux Store* 🛍️"""
     else:
-        message_body = f"""⚠️ *No pending order found*
+        message_body = """⚠️ *No pending order found*
 ⚠️ *لم يتم العثور على طلب معلق*
 
 ━━━━━━━━━━━━━━━━━━━━
