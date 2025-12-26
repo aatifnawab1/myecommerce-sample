@@ -102,11 +102,11 @@ Reply *NO* to cancel ❌
 def send_confirmation_status_message(
     phone: str,
     order_id: str,
-    status: str,
-    language: str = 'en'
+    status: str
 ) -> dict:
     """
     Send WhatsApp message confirming the order status change
+    Bilingual message (English + Arabic)
     """
     client = get_twilio_client()
     if not client:
@@ -116,32 +116,42 @@ def send_confirmation_status_message(
     to_number = format_phone_for_whatsapp(phone)
     
     if status == "confirmed":
-        message_body = f"""✅ *Order Confirmed!*
-
-Order ID: {order_id}
-
-Your order has been confirmed and will be delivered soon.
-
-Thank you for shopping with Zaylux Store! 🎉
+        message_body = f"""✅ *ORDER CONFIRMED!*
+✅ *تم تأكيد الطلب!*
 
 ━━━━━━━━━━━━━━━━━━━━
-تم تأكيد طلبك!
-سيتم توصيل طلبك قريباً.
-شكراً لتسوقك من Zaylux Store! 🎉"""
-    else:  # cancelled
-        message_body = f"""❌ *Order Cancelled*
 
-Order ID: {order_id}
+📦 Order ID: *{order_id}*
+رقم الطلب: *{order_id}*
+
+Your order has been confirmed successfully!
+We will deliver your order soon.
+
+تم تأكيد طلبك بنجاح!
+سيتم توصيل طلبك قريباً.
+
+━━━━━━━━━━━━━━━━━━━━
+
+Thank you for shopping with *Zaylux Store*! 🛍️
+شكراً لتسوقك من *Zaylux Store*! 🛍️"""
+    else:  # cancelled
+        message_body = f"""❌ *ORDER CANCELLED*
+❌ *تم إلغاء الطلب*
+
+━━━━━━━━━━━━━━━━━━━━
+
+📦 Order ID: *{order_id}*
+رقم الطلب: *{order_id}*
 
 Your order has been cancelled as requested.
-
-We hope to serve you again soon.
-Zaylux Store
+تم إلغاء طلبك كما طلبت.
 
 ━━━━━━━━━━━━━━━━━━━━
-تم إلغاء طلبك.
-نأمل أن نخدمك في المستقبل.
-Zaylux Store"""
+
+We hope to serve you again soon.
+نأمل أن نخدمك مرة أخرى قريباً.
+
+*Zaylux Store* 🛍️"""
     
     try:
         message = client.messages.create(
@@ -149,11 +159,83 @@ Zaylux Store"""
             from_=from_number,
             to=to_number
         )
+        print(f"Confirmation message sent: SID={message.sid}")
         return {
             "success": True,
             "message_sid": message.sid
         }
     except Exception as e:
+        print(f"Failed to send confirmation message: {str(e)}")
+        return {
+            "success": False,
+            "error": str(e)
+        }
+
+def send_guidance_message(
+    phone: str,
+    order_id: str = None
+) -> dict:
+    """
+    Send guidance message when reply is not understood
+    Bilingual message (English + Arabic)
+    """
+    client = get_twilio_client()
+    if not client:
+        return {"success": False, "error": "Twilio not configured"}
+    
+    from_number = WHATSAPP_SANDBOX_NUMBER
+    to_number = format_phone_for_whatsapp(phone)
+    
+    if order_id:
+        message_body = f"""⚠️ *We didn't understand your reply*
+⚠️ *لم نفهم ردك*
+
+━━━━━━━━━━━━━━━━━━━━
+
+📦 Order ID: *{order_id}*
+
+To confirm or cancel your order, please reply with:
+
+✅ *YES* or *نعم* - to confirm
+❌ *NO* or *لا* - to cancel
+
+━━━━━━━━━━━━━━━━━━━━
+
+للتأكيد أو الإلغاء، يرجى الرد بـ:
+
+✅ *نعم* - للتأكيد
+❌ *لا* - للإلغاء
+
+*Zaylux Store* 🛍️"""
+    else:
+        message_body = f"""⚠️ *No pending order found*
+⚠️ *لم يتم العثور على طلب معلق*
+
+━━━━━━━━━━━━━━━━━━━━
+
+We couldn't find a pending order for your phone number.
+
+If you have a question, please contact us.
+
+لم نتمكن من العثور على طلب معلق لرقم هاتفك.
+
+إذا كان لديك سؤال، يرجى التواصل معنا.
+
+*Zaylux Store* 🛍️"""
+    
+    try:
+        message = client.messages.create(
+            body=message_body,
+            from_=from_number,
+            to=to_number
+        )
+        print(f"Guidance message sent: SID={message.sid}")
+        return {
+            "success": True,
+            "message_sid": message.sid
+        }
+    except Exception as e:
+        print(f"Failed to send guidance message: {str(e)}")
         return {
             "success": False,
             "error": str(e)
