@@ -61,9 +61,6 @@ const Footer = () => {
               <Link to="/terms" className="text-sm text-gray-400 hover:text-amber-500 transition-colors">
                 {t('termsConditions')}
               </Link>
-              <Link to="/return" className="text-sm text-gray-400 hover:text-amber-500 transition-colors">
-                {t('returnRefund')}
-              </Link>
             </div>
           </div>
 
