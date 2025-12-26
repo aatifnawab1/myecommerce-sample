@@ -166,6 +166,13 @@ async def create_order(
 
 # ==================== WHATSAPP WEBHOOK ====================
 
+def normalize_phone(phone: str) -> str:
+    """Normalize phone number for matching - extract just the digits"""
+    # Remove whatsapp: prefix, +, spaces, dashes
+    phone = phone.replace("whatsapp:", "").strip()
+    digits = ''.join(c for c in phone if c.isdigit())
+    return digits
+
 @public_router.post("/whatsapp/webhook")
 async def whatsapp_webhook(
     request: Request,
@@ -184,8 +191,10 @@ async def whatsapp_webhook(
         
         # Clean the phone number (remove 'whatsapp:' prefix)
         phone = from_number.replace("whatsapp:", "").strip()
+        phone_digits = normalize_phone(phone)
         
         print(f"Received WhatsApp from {phone}: {message_body}")
+        print(f"Normalized phone digits: {phone_digits}")
         
         if not phone or not message_body:
             return Response(content="", status_code=200)
@@ -193,35 +202,54 @@ async def whatsapp_webhook(
         # Parse the reply
         confirmation_status = parse_confirmation_reply(message_body)
         
-        if not confirmation_status:
-            # Could not determine intent - ignore or send help message
-            print(f"Could not parse reply from {phone}: {message_body}")
-            return Response(content="", status_code=200)
-        
         # Find the most recent pending order for this phone number
+        # Try multiple matching strategies
+        order = None
+        
+        # Strategy 1: Exact match
         order = await db.orders.find_one(
-            {
-                "phone": {"$regex": phone.replace("+", "\\+?")},
-                "confirmation_status": "pending"
-            },
+            {"phone": phone, "confirmation_status": "pending"},
             {"_id": 0},
-            sort=[("created_at", -1)]  # Get most recent
+            sort=[("created_at", -1)]
         )
         
-        if not order:
-            # Try without the + sign
-            clean_phone = phone.lstrip('+')
-            order = await db.orders.find_one(
-                {
-                    "phone": {"$regex": f"\\+?{clean_phone}$"},
-                    "confirmation_status": "pending"
-                },
-                {"_id": 0},
-                sort=[("created_at", -1)]
-            )
+        # Strategy 2: Match by last 9 digits (Saudi numbers without country code)
+        if not order and len(phone_digits) >= 9:
+            last_9_digits = phone_digits[-9:]
+            print(f"Trying match with last 9 digits: {last_9_digits}")
+            
+            # Find all pending orders and match manually
+            pending_orders = await db.orders.find(
+                {"confirmation_status": "pending"},
+                {"_id": 0}
+            ).sort("created_at", -1).to_list(100)
+            
+            for pending_order in pending_orders:
+                order_phone = normalize_phone(pending_order.get("phone", ""))
+                order_last_9 = order_phone[-9:] if len(order_phone) >= 9 else order_phone
+                if order_last_9 == last_9_digits:
+                    order = pending_order
+                    print(f"Matched order {pending_order.get('public_order_id')} with phone {pending_order.get('phone')}")
+                    break
         
         if not order:
             print(f"No pending order found for phone: {phone}")
+            # Send guidance message for unknown sender
+            try:
+                from whatsapp_service import send_guidance_message
+                send_guidance_message(phone)
+            except Exception as e:
+                print(f"Failed to send guidance message: {e}")
+            return Response(content="", status_code=200)
+        
+        # If we couldn't parse the reply, send guidance
+        if not confirmation_status:
+            print(f"Could not parse reply from {phone}: {message_body}")
+            try:
+                from whatsapp_service import send_guidance_message
+                send_guidance_message(phone, order.get("public_order_id"))
+            except Exception as e:
+                print(f"Failed to send guidance message: {e}")
             return Response(content="", status_code=200)
         
         # Update order confirmation status
@@ -250,14 +278,17 @@ async def whatsapp_webhook(
                 )
             print(f"Stock restored for cancelled order {order['public_order_id']}")
         
-        # Send confirmation message to customer
+        # Send confirmation/cancellation message to customer via Twilio API
         try:
-            send_confirmation_status_message(
+            result = send_confirmation_status_message(
                 phone=phone,
                 order_id=order["public_order_id"],
-                status=new_status,
-                language='en'
+                status=new_status
             )
+            if result.get("success"):
+                print(f"Auto-reply sent successfully for order {order['public_order_id']}")
+            else:
+                print(f"Failed to send auto-reply: {result.get('error')}")
         except Exception as e:
             print(f"Failed to send confirmation message: {str(e)}")
         
@@ -266,6 +297,8 @@ async def whatsapp_webhook(
         
     except Exception as e:
         print(f"Webhook error: {str(e)}")
+        import traceback
+        traceback.print_exc()
         return Response(content="", status_code=200)
 
 # ==================== ORDER TRACKING ====================
