@@ -102,56 +102,84 @@ const AdminOrders = () => {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold text-white mb-8">Orders Management</h1>
+      <div className="flex items-center justify-between mb-8">
+        <h1 className="text-3xl font-bold text-white">Orders Management</h1>
+        
+        {/* WhatsApp Confirmation Filter */}
+        <div className="flex items-center gap-3">
+          <MessageSquare className="h-5 w-5 text-green-500" />
+          <Label className="text-gray-400">WhatsApp Status:</Label>
+          <Select value={confirmationFilter} onValueChange={setConfirmationFilter}>
+            <SelectTrigger className="w-40 bg-zinc-800 border-zinc-700 text-white">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent className="bg-zinc-800 border-zinc-700">
+              <SelectItem value="all">All Orders</SelectItem>
+              <SelectItem value="pending">Awaiting Reply</SelectItem>
+              <SelectItem value="confirmed">Confirmed</SelectItem>
+              <SelectItem value="cancelled">Cancelled</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
 
       <div className="grid grid-cols-1 gap-4">
-        {orders.map((order) => (
-          <Card key={order.id} className="bg-zinc-900 border-zinc-800">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div className="flex-1">
-                  <div className="flex items-center gap-4 mb-2">
-                    <span className="text-sm text-gray-400">Order ID:</span>
-                    <span className="text-white font-mono">{order.id.substring(0, 8)}</span>
-                    <span className={`font-semibold ${getStatusColor(order.status)}`}>
-                      {order.status}
-                    </span>
-                  </div>
-                  
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                    <div>
-                      <span className="text-gray-400">Customer:</span>
-                      <p className="text-white font-medium">{order.customer_name}</p>
-                    </div>
-                    <div>
-                      <span className="text-gray-400">Phone:</span>
-                      <p className="text-white">{order.phone}</p>
-                    </div>
-                    <div>
-                      <span className="text-gray-400">Total:</span>
-                      <p className="text-amber-500 font-bold">{order.total} SAR</p>
-                    </div>
-                    <div>
-                      <span className="text-gray-400">Date:</span>
-                      <p className="text-white">{new Date(order.created_at).toLocaleDateString()}</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex gap-2">
-                  <Button
-                    size="sm"
-                    onClick={() => handleViewOrder(order.id)}
-                    className="bg-amber-500 hover:bg-amber-600 text-black"
-                  >
-                    <Eye className="h-4 w-4 mr-2" />
-                    View Details
-                  </Button>
-                </div>
-              </div>
+        {orders.length === 0 ? (
+          <Card className="bg-zinc-900 border-zinc-800">
+            <CardContent className="p-6 text-center">
+              <p className="text-gray-400">No orders found</p>
             </CardContent>
           </Card>
-        ))}
+        ) : (
+          orders.map((order) => (
+            <Card key={order.id} className="bg-zinc-900 border-zinc-800">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-4 mb-2">
+                      <span className="text-sm text-gray-400">Order:</span>
+                      <span className="text-amber-500 font-bold">{order.public_order_id || order.id.substring(0, 8)}</span>
+                      <span className={`font-semibold ${getStatusColor(order.status)}`}>
+                        {order.status}
+                      </span>
+                      {getConfirmationStatusBadge(order.confirmation_status)}
+                    </div>
+                    
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                      <div>
+                        <span className="text-gray-400">Customer:</span>
+                        <p className="text-white font-medium">{order.customer_name}</p>
+                      </div>
+                      <div>
+                        <span className="text-gray-400">Phone:</span>
+                        <p className="text-white">{order.phone}</p>
+                      </div>
+                      <div>
+                        <span className="text-gray-400">Total:</span>
+                        <p className="text-amber-500 font-bold">{order.total} SAR</p>
+                      </div>
+                      <div>
+                        <span className="text-gray-400">Date:</span>
+                        <p className="text-white">{new Date(order.created_at).toLocaleDateString()}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-2">
+                    <Button
+                      size="sm"
+                      onClick={() => handleViewOrder(order.id)}
+                      className="bg-amber-500 hover:bg-amber-600 text-black"
+                    >
+                      <Eye className="h-4 w-4 mr-2" />
+                      View Details
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        )}
       </div>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
