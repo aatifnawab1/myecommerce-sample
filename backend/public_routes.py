@@ -393,3 +393,37 @@ async def validate_coupon(
         discount_amount=discount_amount,
         message="Coupon applied successfully"
     )
+
+@public_router.get("/coupons/active")
+async def get_active_coupons(
+    db: AsyncIOMotorDatabase = Depends(get_db)
+):
+    """Get all active and non-expired coupons for public display"""
+    current_time = datetime.utcnow()
+    
+    # Find all active coupons
+    coupons = await db.coupons.find(
+        {"is_active": True},
+        {"_id": 0}
+    ).to_list(100)
+    
+    # Filter out expired coupons
+    active_coupons = []
+    for coupon in coupons:
+        # Check expiry date
+        if coupon.get("expiry_date"):
+            expiry = coupon["expiry_date"]
+            if isinstance(expiry, str):
+                expiry = datetime.fromisoformat(expiry)
+            if current_time > expiry:
+                continue  # Skip expired coupons
+        
+        # Return only necessary fields for public display
+        active_coupons.append({
+            "code": coupon.get("code"),
+            "discount_percentage": coupon.get("discount_percentage", 0),
+            "min_order_value": coupon.get("min_order_value"),
+            "expiry_date": coupon.get("expiry_date").isoformat() if coupon.get("expiry_date") else None
+        })
+    
+    return active_coupons
