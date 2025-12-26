@@ -10,7 +10,7 @@ import {
   DialogTitle,
 } from '../../components/ui/dialog';
 import { Card, CardContent } from '../../components/ui/card';
-import { Eye } from 'lucide-react';
+import { Eye, MessageSquare, CheckCircle, XCircle, Clock } from 'lucide-react';
 import { toast } from 'sonner';
 
 const AdminOrders = () => {
@@ -18,14 +18,16 @@ const AdminOrders = () => {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [confirmationFilter, setConfirmationFilter] = useState('all');
 
   useEffect(() => {
     fetchOrders();
-  }, []);
+  }, [confirmationFilter]);
 
   const fetchOrders = async () => {
     try {
-      const data = await adminAPI.getOrders();
+      const filterValue = confirmationFilter === 'all' ? null : confirmationFilter;
+      const data = await adminAPI.getOrders(filterValue);
       setOrders(data);
     } catch (error) {
       toast.error('Failed to fetch orders');
