@@ -100,6 +100,7 @@ class Order(BaseModel):
     coupon_code: Optional[str] = None
     payment_method: str = "Cash on Delivery"
     status: str = "Pending"  # Pending, Confirmed, Shipped, Delivered, Cancelled
+    confirmation_status: str = "pending"  # pending, confirmed, cancelled (WhatsApp confirmation)
     customer_id: Optional[str] = None
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
