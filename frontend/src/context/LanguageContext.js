@@ -157,11 +157,13 @@ export const translations = {
     about: 'من نحن',
     contact: 'اتصل بنا',
     cart: 'السلة',
+    trackMyOrder: 'تتبع طلبي',
     
     // Hero
-    heroTitle: 'الفخامة بأسلوب جديد',
-    heroSubtitle: 'اكتشف العطور الفاخرة والطائرات المتطورة',
+    heroTitle: 'الفخامة بمعناها الجديد',
+    heroSubtitle: 'اكتشف أرقى العطور وأحدث الطائرات بدون طيار',
     shopNow: 'تسوق الآن',
+    premiumQuality: 'جودة فاخرة مضمونة',
     
     // Products
     addToCart: 'أضف إلى السلة',
@@ -169,6 +171,17 @@ export const translations = {
     sar: 'ريال',
     inStock: 'متوفر',
     reviews: 'تقييم',
+    featuredProducts: 'منتجات مميزة',
+    featuredProductsSubtitle: 'اكتشف مجموعتنا المختارة من العطور الفاخرة والطائرات المتطورة',
+    viewAllProducts: 'عرض جميع المنتجات',
+    
+    // Trust / Benefits
+    cashOnDelivery: 'الدفع عند الاستلام',
+    cashOnDeliveryDesc: 'ادفع عند استلام طلبك',
+    authenticProducts: 'منتجات أصلية',
+    authenticProductsDesc: 'منتجات فاخرة أصلية 100٪',
+    fastDelivery: 'توصيل سريع',
+    fastDeliveryDesc: 'شحن سريع داخل المملكة',
     
     // Cart
     yourCart: 'سلة التسوق',
