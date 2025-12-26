@@ -130,6 +130,75 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Available Offers Section */}
+      {coupons.length > 0 && (
+        <section className="py-16 px-4 bg-gradient-to-b from-black to-zinc-900/50">
+          <div className="container mx-auto">
+            <div className="text-center mb-10">
+              <div className="inline-flex items-center gap-2 bg-green-500/10 border border-green-500/30 rounded-full px-4 py-2 mb-4">
+                <Tag className="h-4 w-4 text-green-500" />
+                <span className="text-sm text-green-500 font-medium">
+                  {language === 'ar' ? 'وفّر المزيد' : 'Save More'}
+                </span>
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
+                {t('availableOffers')}
+              </h2>
+              <p className="text-gray-400 max-w-xl mx-auto">
+                {language === 'ar' 
+                  ? 'استخدم هذه الكوبونات للحصول على خصومات على طلبك'
+                  : 'Use these coupon codes to get discounts on your order'}
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
+              {coupons.map((coupon, index) => (
+                <Card 
+                  key={index} 
+                  className="bg-zinc-900 border-zinc-800 hover:border-green-500/50 transition-all overflow-hidden"
+                >
+                  <div className="bg-gradient-to-r from-green-600 to-green-500 py-3 px-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-white font-bold text-xl">
+                        {coupon.discount_percentage}{t('percentOff')}
+                      </span>
+                      <Percent className="h-6 w-6 text-white/80" />
+                    </div>
+                  </div>
+                  <CardContent className="p-4">
+                    <div className="bg-zinc-800 rounded-lg p-3 mb-3 text-center">
+                      <span className="text-amber-500 font-mono font-bold text-lg tracking-wider">
+                        {coupon.code}
+                      </span>
+                    </div>
+                    <p className="text-gray-400 text-sm text-center">
+                      {language === 'ar' 
+                        ? `خصم ${coupon.discount_percentage}% باستخدام الرمز`
+                        : `Get ${coupon.discount_percentage}% off your order`}
+                    </p>
+                    {coupon.min_order_value && (
+                      <p className="text-gray-500 text-xs text-center mt-2">
+                        {t('minOrder')}: {coupon.min_order_value} {t('sar')}
+                      </p>
+                    )}
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            <div className="text-center mt-8">
+              <Button
+                onClick={() => navigate('/shop')}
+                className="bg-green-600 hover:bg-green-700 text-white font-semibold px-8"
+              >
+                {t('shopNow')}
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Featured Products */}
       <section className="py-20 px-4">
         <div className="container mx-auto">
