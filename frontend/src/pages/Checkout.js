@@ -62,24 +62,27 @@ const Checkout = () => {
     });
   };
 
-  const handleApplyCoupon = async () => {
-    if (!formData.couponCode.trim()) {
-      toast.error('Please enter a coupon code');
+  const handleApplyCoupon = async (couponCode = null) => {
+    const codeToApply = couponCode || formData.couponCode;
+    
+    if (!codeToApply.trim()) {
+      toast.error(language === 'ar' ? 'يرجى إدخال رمز الكوبون' : 'Please enter a coupon code');
       return;
     }
 
     setValidatingCoupon(true);
     try {
-      const response = await publicAPI.validateCoupon(formData.couponCode, getCartTotal());
+      const response = await publicAPI.validateCoupon(codeToApply, getCartTotal());
       if (response.valid) {
         setCouponApplied(response);
-        toast.success(response.message);
+        setFormData(prev => ({ ...prev, couponCode: codeToApply }));
+        toast.success(language === 'ar' ? t('couponApplied') : response.message);
       } else {
         toast.error(response.message);
         setCouponApplied(null);
       }
     } catch (error) {
-      toast.error('Failed to validate coupon');
+      toast.error(language === 'ar' ? 'فشل في التحقق من الكوبون' : 'Failed to validate coupon');
       setCouponApplied(null);
     } finally {
       setValidatingCoupon(false);
