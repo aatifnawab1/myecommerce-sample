@@ -232,6 +232,17 @@ export const translations = {
     whyReason4: 'أسعار تنافسية وعروض حصرية',
     whyReason5: 'دعم عملاء ثنائي اللغة (عربي/إنجليزي)',
     
+    // Coupons Section
+    availableOffers: 'العروض المتاحة',
+    availableCoupons: 'الكوبونات المتاحة',
+    percentOff: '% خصم',
+    minOrder: 'الحد الأدنى للطلب',
+    useCode: 'استخدم الرمز',
+    applyCoupon: 'تطبيق',
+    couponApplied: 'تم تطبيق الكوبون!',
+    noCouponsAvailable: 'لا توجد عروض متاحة حالياً',
+    validUntil: 'صالح حتى',
+    
     // Order Success & Tracking
     orderPlacedSuccess: 'تم تقديم الطلب بنجاح!',
     yourOrderId: 'رقم طلبك',
