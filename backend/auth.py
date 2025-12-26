@@ -4,7 +4,10 @@ from datetime import datetime, timedelta
 from typing import Optional
 import os
 
-SECRET_KEY = os.environ.get('JWT_SECRET_KEY', 'zaylux-admin-secret-key-2025')
+# JWT Secret - must be set in environment for production
+SECRET_KEY = os.environ.get('JWT_SECRET_KEY')
+if not SECRET_KEY:
+    SECRET_KEY = 'zaylux-admin-secret-key-2025'  # Fallback for development only
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_HOURS = 24
 
