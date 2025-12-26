@@ -104,35 +104,17 @@ const ProductCard = ({ product }) => {
               )}
             </div>
           </div>
-
-          <div className="flex items-center gap-2">
-            <Button
-              size="sm"
-              disabled={!isInStock}
-              onClick={handleAddToCart}
-              className="bg-amber-500 hover:bg-amber-600 text-black font-semibold transition-all"
-            >
-              <ShoppingCart className="h-4 w-4" />
-            </Button>
-            
-            {getCartCount() > 0 && (
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  navigate('/cart');
-                }}
-                className="border-amber-500 text-amber-500 hover:bg-amber-500 hover:text-black transition-all relative"
-              >
-                <ShoppingCart className="h-4 w-4" />
-                <span className="absolute -top-2 -right-2 h-5 w-5 rounded-full bg-amber-500 text-black text-xs flex items-center justify-center font-bold">
-                  {getCartCount()}
-                </span>
-              </Button>
-            )}
-          </div>
         </div>
+
+        {/* Full-width Add to Cart Button */}
+        <Button
+          className="w-full mt-3 bg-amber-500 hover:bg-amber-600 text-black font-semibold transition-all"
+          disabled={!isInStock}
+          onClick={handleAddToCart}
+        >
+          <ShoppingCart className={`h-4 w-4 ${language === 'ar' ? 'ml-2' : 'mr-2'}`} />
+          {t('addToCart')}
+        </Button>
       </CardContent>
     </Card>
   );
