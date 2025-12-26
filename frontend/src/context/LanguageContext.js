@@ -100,6 +100,17 @@ export const translations = {
     whyReason4: 'Competitive pricing and exclusive deals',
     whyReason5: 'Bilingual customer support (EN/AR)',
     
+    // Coupons Section
+    availableOffers: 'Available Offers',
+    availableCoupons: 'Available Coupons',
+    percentOff: '% OFF',
+    minOrder: 'Min. order',
+    useCode: 'Use code',
+    applyCoupon: 'Apply',
+    couponApplied: 'Coupon Applied!',
+    noCouponsAvailable: 'No offers available at the moment',
+    validUntil: 'Valid until',
+    
     // Order Success & Tracking
     orderPlacedSuccess: 'Order Placed Successfully!',
     yourOrderId: 'Your Order ID',
