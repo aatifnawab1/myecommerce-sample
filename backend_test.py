@@ -12,7 +12,7 @@ from typing import Dict, Any
 import time
 
 # Load environment variables
-BACKEND_URL = "https://saudi-ecomm.preview.emergentagent.com/api"
+BACKEND_URL = "https://zaylux-launch.preview.emergentagent.com/api"
 
 class ZayluxBackendTester:
     def __init__(self):
