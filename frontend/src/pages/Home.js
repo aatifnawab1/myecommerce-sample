@@ -437,24 +437,26 @@ const Home = () => {
       {/* Categories */}
       <section className="py-20 px-4 bg-gradient-to-b from-black to-zinc-900">
         <div className="container mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div
               className="relative h-80 rounded-lg overflow-hidden group cursor-pointer"
               onClick={() => navigate('/perfumes')}
             >
-              {perfumes[0] && (
+              {perfumes[0] ? (
                 <img
                   src={getImageUrl(perfumes[0].images?.[0] || perfumes[0].image)}
                   alt="Perfumes"
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
+              ) : (
+                <div className="w-full h-full bg-gradient-to-br from-amber-900/50 to-zinc-900" />
               )}
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent flex flex-col justify-end p-8">
-                <h3 className="text-3xl font-bold text-white mb-2">{t('perfumes')}</h3>
-                <p className="text-gray-300 mb-4">
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent flex flex-col justify-end p-6">
+                <h3 className="text-2xl font-bold text-white mb-2">{t('perfumes')}</h3>
+                <p className="text-gray-300 text-sm mb-3">
                   {language === 'ar' ? 'اكتشف العطور الفاخرة' : 'Explore luxury fragrances'}
                 </p>
-                <Button className="w-fit bg-amber-500 hover:bg-amber-600 text-black font-semibold">
+                <Button className="w-fit bg-amber-500 hover:bg-amber-600 text-black font-semibold text-sm">
                   {language === 'ar' ? 'تسوق العطور' : 'Shop Perfumes'}
                 </Button>
               </div>
@@ -464,20 +466,48 @@ const Home = () => {
               className="relative h-80 rounded-lg overflow-hidden group cursor-pointer"
               onClick={() => navigate('/drones')}
             >
-              {drones[0] && (
+              {drones[0] ? (
                 <img
                   src={getImageUrl(drones[0].images?.[0] || drones[0].image)}
                   alt="Drones"
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
+              ) : (
+                <div className="w-full h-full bg-gradient-to-br from-blue-900/50 to-zinc-900" />
               )}
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent flex flex-col justify-end p-8">
-                <h3 className="text-3xl font-bold text-white mb-2">{t('drones')}</h3>
-                <p className="text-gray-300 mb-4">
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent flex flex-col justify-end p-6">
+                <h3 className="text-2xl font-bold text-white mb-2">{t('drones')}</h3>
+                <p className="text-gray-300 text-sm mb-3">
                   {language === 'ar' ? 'اكتشف التكنولوجيا المتقدمة' : 'Discover advanced technology'}
                 </p>
-                <Button className="w-fit bg-amber-500 hover:bg-amber-600 text-black font-semibold">
+                <Button className="w-fit bg-amber-500 hover:bg-amber-600 text-black font-semibold text-sm">
                   {language === 'ar' ? 'تسوق الطائرات' : 'Shop Drones'}
+                </Button>
+              </div>
+            </div>
+
+            <div
+              className="relative h-80 rounded-lg overflow-hidden group cursor-pointer"
+              onClick={() => navigate('/watches')}
+            >
+              {watches[0] ? (
+                <img
+                  src={getImageUrl(watches[0].images?.[0] || watches[0].image)}
+                  alt="Watches"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+              ) : (
+                <div className="w-full h-full bg-gradient-to-br from-zinc-700/50 to-zinc-900 flex items-center justify-center">
+                  <span className="text-6xl">⌚</span>
+                </div>
+              )}
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent flex flex-col justify-end p-6">
+                <h3 className="text-2xl font-bold text-white mb-2">{t('watches')}</h3>
+                <p className="text-gray-300 text-sm mb-3">
+                  {language === 'ar' ? 'اكتشف الساعات الفاخرة' : 'Discover luxury timepieces'}
+                </p>
+                <Button className="w-fit bg-amber-500 hover:bg-amber-600 text-black font-semibold text-sm">
+                  {language === 'ar' ? 'تسوق الساعات' : 'Shop Watches'}
                 </Button>
               </div>
             </div>
