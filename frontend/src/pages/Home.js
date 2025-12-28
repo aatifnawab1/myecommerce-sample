@@ -160,22 +160,23 @@ const Home = () => {
             {/* Slider Container */}
             <div className="relative overflow-hidden rounded-2xl shadow-2xl shadow-amber-500/20">
               {/* Slides */}
-              <div 
-                className="flex transition-transform duration-700 ease-out"
-                style={{ transform: `translateX(-${currentSlide * 100}%)` }}
-              >
-                {promoSlides.map((slide) => (
+              <div className="relative w-full">
+                {promoSlides.map((slide, index) => (
                   <div
                     key={slide.id}
-                    className="w-full flex-shrink-0 relative"
+                    className={`w-full transition-all duration-700 ease-out ${
+                      currentSlide === index 
+                        ? 'opacity-100 relative' 
+                        : 'opacity-0 absolute inset-0'
+                    }`}
                   >
                     <img
                       src={slide.image}
                       alt={slide.alt}
-                      className="w-full h-auto object-cover aspect-square md:aspect-video"
+                      className="w-full h-auto object-contain"
                     />
                     {/* Floating glow effect */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent pointer-events-none" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
                   </div>
                 ))}
               </div>
