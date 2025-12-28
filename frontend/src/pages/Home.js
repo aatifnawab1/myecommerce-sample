@@ -102,6 +102,7 @@ const Home = () => {
   const featuredProducts = products.slice(0, 4);
   const perfumes = products.filter(p => p.category === 'perfume');
   const drones = products.filter(p => p.category === 'drone');
+  const watches = products.filter(p => p.category === 'watch');
 
   return (
     <div className="min-h-screen bg-black">
