@@ -228,7 +228,7 @@ def send_guidance_message(
     if not client:
         return {"success": False, "error": "Twilio not configured"}
     
-    from_number = WHATSAPP_SANDBOX_NUMBER
+    from_number = get_whatsapp_number()
     to_number = format_phone_for_whatsapp(phone)
     
     if order_id:
