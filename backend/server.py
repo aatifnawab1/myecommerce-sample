@@ -6,13 +6,13 @@ import os
 import logging
 from pathlib import Path
 
-# Import route modules
-from admin_routes import admin_router
-from public_routes import public_router
-
-
+# Load environment variables FIRST before any imports that need them
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
+
+# Import route modules (after dotenv is loaded)
+from admin_routes import admin_router
+from public_routes import public_router
 
 # MongoDB connection
 mongo_url = os.environ['MONGO_URL']
