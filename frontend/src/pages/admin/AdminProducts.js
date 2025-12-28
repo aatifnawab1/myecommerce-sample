@@ -304,6 +304,7 @@ const AdminProducts = () => {
                     <SelectContent className="bg-zinc-800 border-zinc-700">
                       <SelectItem value="perfume">Perfume</SelectItem>
                       <SelectItem value="drone">Drone</SelectItem>
+                      <SelectItem value="watch">Watch</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
