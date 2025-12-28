@@ -168,6 +168,8 @@ export const translations = {
     heroSubtitle: 'اكتشف أرقى العطور وأحدث الطائرات بدون طيار',
     shopNow: 'تسوق الآن',
     premiumQuality: 'جودة فاخرة مضمونة',
+    watchesSubtitle: 'اكتشف مجموعتنا من الساعات الفاخرة',
+    noProductsFound: 'لم يتم العثور على منتجات',
     
     // Products
     addToCart: 'أضف إلى السلة',
