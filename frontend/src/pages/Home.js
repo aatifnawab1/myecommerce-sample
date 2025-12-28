@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, Sparkles, Package, Shield, Truck, Tag, Percent, ShoppingCart, Star } from 'lucide-react';
+import { ArrowRight, Sparkles, Package, Shield, Truck, Tag, Percent, ShoppingCart, Star, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
@@ -8,6 +8,30 @@ import { useLanguage } from '../context/LanguageContext';
 import { useCart } from '../context/CartContext';
 import publicAPI from '../services/publicAPI';
 import { toast } from 'sonner';
+
+// Promotional slider images
+const promoSlides = [
+  {
+    id: 1,
+    image: 'https://customer-assets.emergentagent.com/job_zaylux-launch/artifacts/0q8ux48h_ChatGPT%20Image%20Dec%2028%2C%202025%2C%2005_44_35%20PM.png',
+    alt: 'Zaylux - Luxury Perfumes, Watches & Electronics'
+  },
+  {
+    id: 2,
+    image: 'https://customer-assets.emergentagent.com/job_zaylux-launch/artifacts/rzp2bylj_ChatGPT%20Image%20Dec%2028%2C%202025%2C%2006_12_30%20PM.png',
+    alt: 'Blue Laverne Bakhur - Special Offer'
+  },
+  {
+    id: 3,
+    image: 'https://customer-assets.emergentagent.com/job_zaylux-launch/artifacts/ksnusbvm_ChatGPT%20Image%20Dec%2028%2C%202025%2C%2006_12_20%20PM.png',
+    alt: 'Professional Drone - Special Price'
+  },
+  {
+    id: 4,
+    image: 'https://customer-assets.emergentagent.com/job_zaylux-launch/artifacts/nfw6kb2s_ChatGPT%20Image%20Dec%2028%2C%202025%2C%2006_12_16%20PM.png',
+    alt: 'Casio Watch - Special Offer'
+  }
+];
 
 // Helper to get full image URL
 const getImageUrl = (imageUrl) => {
