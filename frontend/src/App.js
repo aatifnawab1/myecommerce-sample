@@ -12,6 +12,7 @@ import Home from "./pages/Home";
 import Shop from "./pages/Shop";
 import Perfumes from "./pages/Perfumes";
 import Drones from "./pages/Drones";
+import Watches from "./pages/Watches";
 import ProductDetail from "./pages/ProductDetail";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
