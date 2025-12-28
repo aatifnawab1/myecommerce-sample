@@ -1,13 +1,16 @@
 """
 WhatsApp Service for Order Confirmation via Twilio
+Using approved WhatsApp Business Number
 """
 import os
 import re
 from twilio.rest import Client
 from typing import Optional
 
-# Twilio WhatsApp Sandbox number
-WHATSAPP_SANDBOX_NUMBER = "whatsapp:+14155238886"
+def get_whatsapp_number() -> str:
+    """Get the configured WhatsApp Business number"""
+    number = os.environ.get('TWILIO_WHATSAPP_NUMBER', '+17656763235')
+    return f"whatsapp:{number}"
 
 # Initialize Twilio client
 def get_twilio_client() -> Optional[Client]:
