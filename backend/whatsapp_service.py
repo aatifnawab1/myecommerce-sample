@@ -4,7 +4,6 @@ Using approved WhatsApp Business Templates
 """
 import os
 import re
-import json
 from twilio.rest import Client
 from typing import Optional
 
@@ -13,7 +12,6 @@ def get_whatsapp_number() -> str:
     number = os.environ.get('TWILIO_WHATSAPP_NUMBER', '+17656763235')
     return f"whatsapp:{number}"
 
-# Initialize Twilio client
 def get_twilio_client() -> Optional[Client]:
     """Get Twilio client if credentials are configured"""
     account_sid = os.environ.get('TWILIO_ACCOUNT_SID')
@@ -24,31 +22,6 @@ def get_twilio_client() -> Optional[Client]:
         return None
     
     return Client(account_sid, auth_token)
-
-def send_template_message(
-    client: Client,
-    to_number: str,
-    template_name: str,
-    variables: dict
-) -> dict:
-    """
-    Send a WhatsApp template message using Twilio Content API
-    """
-    from_number = get_whatsapp_number()
-    
-    try:
-        # For Twilio WhatsApp templates, use content_sid or template format
-        # Template variables are passed as content_variables
-        message = client.messages.create(
-            from_=from_number,
-            to=to_number,
-            content_sid=None,  # Will be set if using Content API
-            body=None,  # Not used with templates
-            # Using template with messaging_service or direct template call
-        )
-        return {"success": True, "message_sid": message.sid}
-    except Exception as e:
-        return {"success": False, "error": str(e)}
 
 def normalize_saudi_phone(phone: str) -> str:
     """
@@ -76,30 +49,21 @@ def normalize_saudi_phone(phone: str) -> str:
     # Remove leading zeros (00966 -> 966)
     phone = phone.lstrip('0')
     
-    # Now we have digits only, determine the format
-    # Saudi mobile numbers are 9 digits starting with 5
-    # Full format with country code is 12 digits: 966XXXXXXXXX
-    
     if phone.startswith('966'):
-        # Already has country code: 966506744374
         phone = '+' + phone
     elif len(phone) == 9 and phone.startswith('5'):
-        # 9 digits starting with 5: 506744374
         phone = '+966' + phone
     elif len(phone) == 10 and phone.startswith('05'):
-        # This shouldn't happen after lstrip('0') but just in case
         phone = '+966' + phone[1:]
     else:
-        # Unknown format, try to add +966 if it looks like a Saudi number
         if len(phone) >= 9:
-            # Take the last 9 digits if they start with 5
             last_9 = phone[-9:]
             if last_9.startswith('5'):
                 phone = '+966' + last_9
             else:
-                phone = '+' + phone  # Keep as is with + prefix
+                phone = '+' + phone
         else:
-            phone = '+966' + phone  # Assume Saudi
+            phone = '+966' + phone
     
     print(f"Normalized phone: {phone}")
     return phone
@@ -117,58 +81,82 @@ def send_order_confirmation_request(
     language: str = 'en'
 ) -> dict:
     """
-    Send WhatsApp message asking customer to confirm order
-    Uses approved WhatsApp Business Number
+    Send WhatsApp order confirmation using approved templates
+    Sends both English and Arabic templates for bilingual support
     Returns: dict with success status and message_sid
     """
     client = get_twilio_client()
     if not client:
         return {"success": False, "error": "Twilio not configured"}
     
-    # Use approved WhatsApp Business number as sender
     from_number = get_whatsapp_number()
     to_number = format_phone_for_whatsapp(phone)
     
-    # Message with clear YES/NO instructions
-    message_body = f"""🛍️ *Zaylux Store - Order Confirmation*
-
-Hello {customer_name}!
-
-Your order has been received.
-
-📦 *Order ID:* {order_id}
-💰 *Total:* {total:.2f} SAR
-💳 *Payment:* Cash on Delivery
-
-━━━━━━━━━━━━━━━━━━━━
-*Please confirm your order:*
-
-Reply *YES* to confirm ✅
-Reply *NO* to cancel ❌
-━━━━━━━━━━━━━━━━━━━━
-
-مرحباً! للتأكيد بالعربي:
-رد بـ *نعم* للتأكيد ✅
-رد بـ *لا* للإلغاء ❌"""
+    results = []
     
+    # Send English template: order_confirmation_cod_en
+    # Template content: Thank you for your order from Zaylux Store.
+    # Order ID: {{1}}
+    # Please reply YES to confirm your Cash on Delivery order,
+    # or NO to cancel it.
+    # For more details, you can visit our website: https://zayluxstore.com
     try:
-        message = client.messages.create(
-            body=message_body,
+        english_message = client.messages.create(
             from_=from_number,
-            to=to_number
+            to=to_number,
+            content_sid=os.environ.get('TWILIO_TEMPLATE_EN_SID'),  # If using Content SID
+            content_variables=f'{{"1": "{order_id}"}}' if os.environ.get('TWILIO_TEMPLATE_EN_SID') else None,
+            body=f"""Thank you for your order from Zaylux Store.
+
+Order ID: {order_id}
+
+Please reply YES to confirm your Cash on Delivery order,
+or NO to cancel it.
+
+For more details, you can visit our website:
+https://zayluxstore.com""" if not os.environ.get('TWILIO_TEMPLATE_EN_SID') else None
         )
-        print(f"WhatsApp message sent: SID={message.sid}, Status={message.status}")
-        return {
-            "success": True,
-            "message_sid": message.sid,
-            "status": message.status
-        }
+        print(f"English template sent: SID={english_message.sid}, Status={english_message.status}")
+        results.append({"lang": "en", "success": True, "sid": english_message.sid})
     except Exception as e:
-        print(f"WhatsApp send error: {str(e)}")
-        return {
-            "success": False,
-            "error": str(e)
-        }
+        print(f"English template error: {str(e)}")
+        results.append({"lang": "en", "success": False, "error": str(e)})
+    
+    # Send Arabic template: order_conformation_cod
+    # Template content: شكرًا لطلبك من متجر Zaylux.
+    # رقم الطلب: {{1}}
+    # يرجى الرد بكلمة نعم لتأكيد طلب الدفع عند الاستلام،
+    # أو كلمة لا لإلغاء الطلب.
+    # للمزيد من التفاصيل، يمكنك زيارة موقعنا: https://zayluxstore.com
+    try:
+        arabic_message = client.messages.create(
+            from_=from_number,
+            to=to_number,
+            content_sid=os.environ.get('TWILIO_TEMPLATE_AR_SID'),  # If using Content SID
+            content_variables=f'{{"1": "{order_id}"}}' if os.environ.get('TWILIO_TEMPLATE_AR_SID') else None,
+            body=f"""شكرًا لطلبك من متجر Zaylux.
+
+رقم الطلب: {order_id}
+
+يرجى الرد بكلمة نعم لتأكيد طلب الدفع عند الاستلام،
+أو كلمة لا لإلغاء الطلب.
+
+للمزيد من التفاصيل، يمكنك زيارة موقعنا:
+https://zayluxstore.com""" if not os.environ.get('TWILIO_TEMPLATE_AR_SID') else None
+        )
+        print(f"Arabic template sent: SID={arabic_message.sid}, Status={arabic_message.status}")
+        results.append({"lang": "ar", "success": True, "sid": arabic_message.sid})
+    except Exception as e:
+        print(f"Arabic template error: {str(e)}")
+        results.append({"lang": "ar", "success": False, "error": str(e)})
+    
+    # Return success if at least one message was sent
+    success_count = sum(1 for r in results if r.get("success"))
+    return {
+        "success": success_count > 0,
+        "results": results,
+        "message_sid": results[0].get("sid") if results and results[0].get("success") else None
+    }
 
 def send_confirmation_status_message(
     phone: str,
@@ -178,6 +166,7 @@ def send_confirmation_status_message(
     """
     Send WhatsApp message confirming the order status change
     Bilingual message (English + Arabic)
+    This is sent within 24h window so free-form messages work
     """
     client = get_twilio_client()
     if not client:
@@ -249,6 +238,7 @@ def send_guidance_message(
     """
     Send guidance message when reply is not understood
     Bilingual message (English + Arabic)
+    This is sent within 24h window so free-form messages work
     """
     client = get_twilio_client()
     if not client:
