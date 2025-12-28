@@ -1,9 +1,10 @@
 """
 WhatsApp Service for Order Confirmation via Twilio
-Using approved WhatsApp Business Templates
+Using approved WhatsApp Business Templates with Content SIDs
 """
 import os
 import re
+import json
 from twilio.rest import Client
 from typing import Optional
 
@@ -92,29 +93,20 @@ def send_order_confirmation_request(
     from_number = get_whatsapp_number()
     to_number = format_phone_for_whatsapp(phone)
     
+    # Get template Content SIDs from environment
+    english_template_sid = os.environ.get('TWILIO_TEMPLATE_EN_SID', 'HX6de804e0a397caa801d148024be97c5d')
+    arabic_template_sid = os.environ.get('TWILIO_TEMPLATE_AR_SID', 'HX8a4d4842ef5fd8c68446cd1d23b158da')
+    
     results = []
     
     # Send English template: order_confirmation_cod_en
-    # Template content: Thank you for your order from Zaylux Store.
-    # Order ID: {{1}}
-    # Please reply YES to confirm your Cash on Delivery order,
-    # or NO to cancel it.
-    # For more details, you can visit our website: https://zayluxstore.com
+    # Template variable {{1}} = order_id
     try:
         english_message = client.messages.create(
             from_=from_number,
             to=to_number,
-            content_sid=os.environ.get('TWILIO_TEMPLATE_EN_SID'),  # If using Content SID
-            content_variables=f'{{"1": "{order_id}"}}' if os.environ.get('TWILIO_TEMPLATE_EN_SID') else None,
-            body=f"""Thank you for your order from Zaylux Store.
-
-Order ID: {order_id}
-
-Please reply YES to confirm your Cash on Delivery order,
-or NO to cancel it.
-
-For more details, you can visit our website:
-https://zayluxstore.com""" if not os.environ.get('TWILIO_TEMPLATE_EN_SID') else None
+            content_sid=english_template_sid,
+            content_variables=json.dumps({"1": order_id})
         )
         print(f"English template sent: SID={english_message.sid}, Status={english_message.status}")
         results.append({"lang": "en", "success": True, "sid": english_message.sid})
@@ -123,26 +115,13 @@ https://zayluxstore.com""" if not os.environ.get('TWILIO_TEMPLATE_EN_SID') else 
         results.append({"lang": "en", "success": False, "error": str(e)})
     
     # Send Arabic template: order_conformation_cod
-    # Template content: شكرًا لطلبك من متجر Zaylux.
-    # رقم الطلب: {{1}}
-    # يرجى الرد بكلمة نعم لتأكيد طلب الدفع عند الاستلام،
-    # أو كلمة لا لإلغاء الطلب.
-    # للمزيد من التفاصيل، يمكنك زيارة موقعنا: https://zayluxstore.com
+    # Template variable {{1}} = order_id
     try:
         arabic_message = client.messages.create(
             from_=from_number,
             to=to_number,
-            content_sid=os.environ.get('TWILIO_TEMPLATE_AR_SID'),  # If using Content SID
-            content_variables=f'{{"1": "{order_id}"}}' if os.environ.get('TWILIO_TEMPLATE_AR_SID') else None,
-            body=f"""شكرًا لطلبك من متجر Zaylux.
-
-رقم الطلب: {order_id}
-
-يرجى الرد بكلمة نعم لتأكيد طلب الدفع عند الاستلام،
-أو كلمة لا لإلغاء الطلب.
-
-للمزيد من التفاصيل، يمكنك زيارة موقعنا:
-https://zayluxstore.com""" if not os.environ.get('TWILIO_TEMPLATE_AR_SID') else None
+            content_sid=arabic_template_sid,
+            content_variables=json.dumps({"1": order_id})
         )
         print(f"Arabic template sent: SID={arabic_message.sid}, Status={arabic_message.status}")
         results.append({"lang": "ar", "success": True, "sid": arabic_message.sid})
