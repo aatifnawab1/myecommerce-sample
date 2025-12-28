@@ -92,19 +92,18 @@ def send_order_confirmation_request(
 ) -> dict:
     """
     Send WhatsApp message asking customer to confirm order
-    Uses Twilio WhatsApp Sandbox for testing
+    Uses approved WhatsApp Business Number
     Returns: dict with success status and message_sid
     """
     client = get_twilio_client()
     if not client:
         return {"success": False, "error": "Twilio not configured"}
     
-    # Use sandbox number as sender
-    from_number = WHATSAPP_SANDBOX_NUMBER
+    # Use approved WhatsApp Business number as sender
+    from_number = get_whatsapp_number()
     to_number = format_phone_for_whatsapp(phone)
     
     # Message with clear YES/NO instructions
-    # Using simple format that works with WhatsApp sandbox
     message_body = f"""🛍️ *Zaylux Store - Order Confirmation*
 
 Hello {customer_name}!
