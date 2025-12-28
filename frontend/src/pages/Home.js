@@ -325,7 +325,96 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 3. Available Offers Section */}
+      {/* 3. Categories Section - Mobile Friendly Grid */}
+      <section className="py-12 md:py-20 px-4 bg-gradient-to-b from-black to-zinc-900">
+        <div className="container mx-auto">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
+              {language === 'ar' ? 'تسوق حسب الفئة' : 'Shop by Category'}
+            </h2>
+            <p className="text-gray-400 text-sm md:text-base">
+              {language === 'ar' ? 'اختر من مجموعاتنا المميزة' : 'Choose from our exclusive collections'}
+            </p>
+          </div>
+          <div className="grid grid-cols-3 md:grid-cols-3 gap-3 md:gap-8">
+            <div
+              className="relative h-32 sm:h-48 md:h-80 rounded-lg overflow-hidden group cursor-pointer"
+              onClick={() => navigate('/perfumes')}
+            >
+              {perfumes[0] ? (
+                <img
+                  src={getImageUrl(perfumes[0].images?.[0] || perfumes[0].image)}
+                  alt="Perfumes"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+              ) : (
+                <div className="w-full h-full bg-gradient-to-br from-amber-900/50 to-zinc-900" />
+              )}
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent flex flex-col justify-end p-2 sm:p-4 md:p-6">
+                <h3 className="text-sm sm:text-lg md:text-2xl font-bold text-white mb-0 sm:mb-1 md:mb-2">{t('perfumes')}</h3>
+                <p className="text-gray-300 text-xs md:text-sm mb-1 md:mb-3 hidden sm:block">
+                  {language === 'ar' ? 'اكتشف العطور الفاخرة' : 'Explore luxury fragrances'}
+                </p>
+                <Button className="w-fit bg-amber-500 hover:bg-amber-600 text-black font-semibold text-xs md:text-sm px-2 py-1 md:px-4 md:py-2 h-auto hidden md:flex">
+                  {language === 'ar' ? 'تسوق العطور' : 'Shop Perfumes'}
+                </Button>
+              </div>
+            </div>
+
+            <div
+              className="relative h-32 sm:h-48 md:h-80 rounded-lg overflow-hidden group cursor-pointer"
+              onClick={() => navigate('/drones')}
+            >
+              {drones[0] ? (
+                <img
+                  src={getImageUrl(drones[0].images?.[0] || drones[0].image)}
+                  alt="Drones"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+              ) : (
+                <div className="w-full h-full bg-gradient-to-br from-blue-900/50 to-zinc-900" />
+              )}
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent flex flex-col justify-end p-2 sm:p-4 md:p-6">
+                <h3 className="text-sm sm:text-lg md:text-2xl font-bold text-white mb-0 sm:mb-1 md:mb-2">{t('drones')}</h3>
+                <p className="text-gray-300 text-xs md:text-sm mb-1 md:mb-3 hidden sm:block">
+                  {language === 'ar' ? 'اكتشف التكنولوجيا المتقدمة' : 'Discover advanced technology'}
+                </p>
+                <Button className="w-fit bg-amber-500 hover:bg-amber-600 text-black font-semibold text-xs md:text-sm px-2 py-1 md:px-4 md:py-2 h-auto hidden md:flex">
+                  {language === 'ar' ? 'تسوق الطائرات' : 'Shop Drones'}
+                </Button>
+              </div>
+            </div>
+
+            <div
+              className="relative h-32 sm:h-48 md:h-80 rounded-lg overflow-hidden group cursor-pointer"
+              onClick={() => navigate('/watches')}
+            >
+              {watches[0] ? (
+                <img
+                  src={getImageUrl(watches[0].images?.[0] || watches[0].image)}
+                  alt="Watches"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+              ) : (
+                <div className="w-full h-full bg-gradient-to-br from-zinc-700/50 to-zinc-900 flex items-center justify-center">
+                  <span className="text-3xl md:text-6xl">⌚</span>
+                </div>
+              )}
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent flex flex-col justify-end p-2 sm:p-4 md:p-6">
+                <h3 className="text-sm sm:text-lg md:text-2xl font-bold text-white mb-0 sm:mb-1 md:mb-2">{t('watches')}</h3>
+                <p className="text-gray-300 text-xs md:text-sm mb-1 md:mb-3 hidden sm:block">
+                  {language === 'ar' ? 'اكتشف الساعات الفاخرة' : 'Discover luxury timepieces'}
+                </p>
+                <Button className="w-fit bg-amber-500 hover:bg-amber-600 text-black font-semibold text-xs md:text-sm px-2 py-1 md:px-4 md:py-2 h-auto hidden md:flex">
+                  {language === 'ar' ? 'تسوق الساعات' : 'Shop Watches'}
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. Available Offers Section */}
       {coupons.length > 0 && (
         <section className="py-16 px-4 bg-gradient-to-b from-black to-zinc-900/50">
           <div className="container mx-auto">
