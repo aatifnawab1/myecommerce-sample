@@ -105,58 +105,29 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-black">
-      {/* 1. Hero Section */}
-      <section className="relative h-[70vh] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black z-10" />
-          <img
-            src="https://images.unsplash.com/photo-1615540732776-ed0a2145e8f1?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2MzR8MHwxfHNlYXJjaHwyfHxwcmVtaXVtJTIwbGlmZXN0eWxlfGVufDB8fHx8MTc2NjY3MDAyMXww&ixlib=rb-4.1.0&q=85"
-            alt="Luxury lifestyle"
-            className="w-full h-full object-cover"
-          />
-        </div>
-
-        <div className="relative z-20 text-center px-4 max-w-4xl mx-auto">
-          <div className="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 rounded-full px-4 py-2 mb-6 backdrop-blur-sm">
-            <Sparkles className="h-4 w-4 text-amber-500" />
-            <span className="text-sm text-amber-500 font-medium">{t('premiumQuality')}</span>
-          </div>
-
-          <h1 className="text-5xl md:text-7xl font-bold mb-6">
-            <span className="bg-gradient-to-r from-amber-300 via-amber-500 to-amber-600 bg-clip-text text-transparent">
-              {t('heroTitle')}
-            </span>
-          </h1>
-
-          <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-2xl mx-auto">
-            {t('heroSubtitle')}
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button
-              size="lg"
-              onClick={() => navigate('/shop')}
-              className="bg-amber-500 hover:bg-amber-600 text-black font-bold text-lg px-8 transition-all hover:scale-105"
-            >
-              {t('shopNow')}
-              <ArrowRight className={`${language === 'ar' ? 'mr-2 rotate-180' : 'ml-2'} h-5 w-5`} />
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              onClick={() => navigate('/about')}
-              className="border-amber-500 text-amber-500 hover:bg-amber-500/10 font-semibold text-lg px-8 transition-all"
-            >
-              {t('about')}
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* Promotional Floating Slider */}
-      <section className="py-12 px-4 bg-gradient-to-b from-black via-zinc-900/50 to-black overflow-hidden">
+      {/* 1. Hero Section - Promotional Slider */}
+      <section className="relative pt-8 pb-12 px-4 bg-gradient-to-b from-black via-zinc-900/50 to-black overflow-hidden">
         <div className="container mx-auto">
-          <div className="relative max-w-4xl mx-auto">
+          {/* Header Text */}
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 rounded-full px-4 py-2 mb-6 backdrop-blur-sm">
+              <Sparkles className="h-4 w-4 text-amber-500" />
+              <span className="text-sm text-amber-500 font-medium">{t('premiumQuality')}</span>
+            </div>
+
+            <h1 className="text-4xl md:text-6xl font-bold mb-4">
+              <span className="bg-gradient-to-r from-amber-300 via-amber-500 to-amber-600 bg-clip-text text-transparent">
+                {t('heroTitle')}
+              </span>
+            </h1>
+
+            <p className="text-lg md:text-xl text-gray-300 mb-6 max-w-2xl mx-auto">
+              {t('heroSubtitle')}
+            </p>
+          </div>
+
+          {/* Main Slider */}
+          <div className="relative max-w-5xl mx-auto">
             {/* Slider Container */}
             <div className="relative overflow-hidden rounded-2xl shadow-2xl shadow-amber-500/20">
               {/* Slides */}
@@ -217,6 +188,26 @@ const Home = () => {
             {/* Floating decoration elements */}
             <div className="absolute -top-4 -left-4 w-24 h-24 bg-amber-500/10 rounded-full blur-2xl pointer-events-none" />
             <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-amber-500/10 rounded-full blur-2xl pointer-events-none" />
+          </div>
+
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-10">
+            <Button
+              size="lg"
+              onClick={() => navigate('/shop')}
+              className="bg-amber-500 hover:bg-amber-600 text-black font-bold text-lg px-8 transition-all hover:scale-105"
+            >
+              {t('shopNow')}
+              <ArrowRight className={`${language === 'ar' ? 'mr-2 rotate-180' : 'ml-2'} h-5 w-5`} />
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              onClick={() => navigate('/about')}
+              className="border-amber-500 text-amber-500 hover:bg-amber-500/10 font-semibold text-lg px-8 transition-all"
+            >
+              {t('about')}
+            </Button>
           </div>
         </div>
       </section>
