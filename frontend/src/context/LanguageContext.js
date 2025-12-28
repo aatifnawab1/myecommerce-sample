@@ -20,6 +20,8 @@ export const translations = {
     heroSubtitle: 'Discover premium perfumes and cutting-edge drones',
     shopNow: 'Shop Now',
     premiumQuality: 'Premium Quality Guaranteed',
+    watchesSubtitle: 'Discover our collection of premium luxury watches',
+    noProductsFound: 'No products found',
     
     // Products
     addToCart: 'Add to Cart',
