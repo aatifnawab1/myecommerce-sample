@@ -97,16 +97,26 @@ def send_order_confirmation_request(
     english_template_sid = os.environ.get('TWILIO_TEMPLATE_EN_SID', 'HX6de804e0a397caa801d148024be97c5d')
     arabic_template_sid = os.environ.get('TWILIO_TEMPLATE_AR_SID', 'HX8a4d4842ef5fd8c68446cd1d23b158da')
     
+    # Prepare content variables - ensure order_id is a clean string
+    content_vars = json.dumps({"1": str(order_id)})
+    
+    print(f"=== WhatsApp Template Debug ===")
+    print(f"From: {from_number}")
+    print(f"To: {to_number}")
+    print(f"Order ID: {order_id}")
+    print(f"Content Variables: {content_vars}")
+    print(f"English Template SID: {english_template_sid}")
+    print(f"Arabic Template SID: {arabic_template_sid}")
+    
     results = []
     
     # Send English template: order_confirmation_cod_en
-    # Template variable {{1}} = order_id
     try:
         english_message = client.messages.create(
             from_=from_number,
             to=to_number,
             content_sid=english_template_sid,
-            content_variables=json.dumps({"1": order_id})
+            content_variables=content_vars
         )
         print(f"English template sent: SID={english_message.sid}, Status={english_message.status}")
         results.append({"lang": "en", "success": True, "sid": english_message.sid})
@@ -115,13 +125,12 @@ def send_order_confirmation_request(
         results.append({"lang": "en", "success": False, "error": str(e)})
     
     # Send Arabic template: order_conformation_cod
-    # Template variable {{1}} = order_id
     try:
         arabic_message = client.messages.create(
             from_=from_number,
             to=to_number,
             content_sid=arabic_template_sid,
-            content_variables=json.dumps({"1": order_id})
+            content_variables=content_vars
         )
         print(f"Arabic template sent: SID={arabic_message.sid}, Status={arabic_message.status}")
         results.append({"lang": "ar", "success": True, "sid": arabic_message.sid})
