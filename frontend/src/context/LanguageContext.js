@@ -157,6 +157,7 @@ export const translations = {
     shop: 'المتجر',
     perfumes: 'العطور',
     drones: 'الطائرات',
+    watches: 'الساعات',
     about: 'من نحن',
     contact: 'اتصل بنا',
     cart: 'السلة',
