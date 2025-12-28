@@ -49,6 +49,21 @@ const Home = () => {
   const [products, setProducts] = useState([]);
   const [coupons, setCoupons] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  // Auto-slide functionality
+  const nextSlide = useCallback(() => {
+    setCurrentSlide((prev) => (prev + 1) % promoSlides.length);
+  }, []);
+
+  const prevSlide = useCallback(() => {
+    setCurrentSlide((prev) => (prev - 1 + promoSlides.length) % promoSlides.length);
+  }, []);
+
+  useEffect(() => {
+    const timer = setInterval(nextSlide, 4000); // Auto-slide every 4 seconds
+    return () => clearInterval(timer);
+  }, [nextSlide]);
 
   useEffect(() => {
     fetchProducts();
