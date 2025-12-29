@@ -54,6 +54,12 @@ class PublicAPI {
     });
     return response.data;
   }
+
+  // Promotional Slides
+  async getSlides() {
+    const response = await axios.get(`${API}/slides`);
+    return response.data;
+  }
 }
 
 export default new PublicAPI();
