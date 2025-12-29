@@ -19,6 +19,7 @@ const Header = () => {
     { path: '/perfumes', label: t('perfumes') },
     { path: '/drones', label: t('drones') },
     { path: '/watches', label: t('watches') },
+    { path: '/others', label: t('others') },
     { path: '/about', label: t('about') },
     { path: '/contact', label: t('contact') }
   ];
