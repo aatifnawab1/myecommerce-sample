@@ -9,27 +9,31 @@ import { useCart } from '../context/CartContext';
 import publicAPI from '../services/publicAPI';
 import { toast } from 'sonner';
 
-// Promotional slider images
-const promoSlides = [
+// Default promotional slides (fallback if no slides in database)
+const defaultSlides = [
   {
-    id: 1,
-    image: 'https://customer-assets.emergentagent.com/job_zaylux-launch/artifacts/0q8ux48h_ChatGPT%20Image%20Dec%2028%2C%202025%2C%2005_44_35%20PM.png',
-    alt: 'Zaylux - Luxury Perfumes, Watches & Electronics'
+    id: 'default-1',
+    image_url: 'https://customer-assets.emergentagent.com/job_zaylux-launch/artifacts/0q8ux48h_ChatGPT%20Image%20Dec%2028%2C%202025%2C%2005_44_35%20PM.png',
+    alt_text_en: 'Zaylux - Luxury Perfumes, Watches & Electronics',
+    alt_text_ar: 'Zaylux - العطور والساعات والإلكترونيات الفاخرة'
   },
   {
-    id: 2,
-    image: 'https://customer-assets.emergentagent.com/job_zaylux-launch/artifacts/rzp2bylj_ChatGPT%20Image%20Dec%2028%2C%202025%2C%2006_12_30%20PM.png',
-    alt: 'Blue Laverne Bakhur - Special Offer'
+    id: 'default-2',
+    image_url: 'https://customer-assets.emergentagent.com/job_zaylux-launch/artifacts/rzp2bylj_ChatGPT%20Image%20Dec%2028%2C%202025%2C%2006_12_30%20PM.png',
+    alt_text_en: 'Blue Laverne Bakhur - Special Offer',
+    alt_text_ar: 'بخور بلو لافيرن - عرض خاص'
   },
   {
-    id: 3,
-    image: 'https://customer-assets.emergentagent.com/job_zaylux-launch/artifacts/ksnusbvm_ChatGPT%20Image%20Dec%2028%2C%202025%2C%2006_12_20%20PM.png',
-    alt: 'Professional Drone - Special Price'
+    id: 'default-3',
+    image_url: 'https://customer-assets.emergentagent.com/job_zaylux-launch/artifacts/ksnusbvm_ChatGPT%20Image%20Dec%2028%2C%202025%2C%2006_12_20%20PM.png',
+    alt_text_en: 'Professional Drone - Special Price',
+    alt_text_ar: 'طائرة درون احترافية - سعر خاص'
   },
   {
-    id: 4,
-    image: 'https://customer-assets.emergentagent.com/job_zaylux-launch/artifacts/nfw6kb2s_ChatGPT%20Image%20Dec%2028%2C%202025%2C%2006_12_16%20PM.png',
-    alt: 'Casio Watch - Special Offer'
+    id: 'default-4',
+    image_url: 'https://customer-assets.emergentagent.com/job_zaylux-launch/artifacts/nfw6kb2s_ChatGPT%20Image%20Dec%2028%2C%202025%2C%2006_12_16%20PM.png',
+    alt_text_en: 'Casio Watch - Special Offer',
+    alt_text_ar: 'ساعة كاسيو - عرض خاص'
   }
 ];
 
@@ -48,16 +52,18 @@ const Home = () => {
   const { addToCart } = useCart();
   const [products, setProducts] = useState([]);
   const [coupons, setCoupons] = useState([]);
+  const [promoSlides, setPromoSlides] = useState(defaultSlides);
   const [loading, setLoading] = useState(true);
   const [currentSlide, setCurrentSlide] = useState(0);
 
   // Auto-slide functionality
   const nextSlide = useCallback(() => {
     setCurrentSlide((prev) => (prev + 1) % promoSlides.length);
-  }, []);
+  }, [promoSlides.length]);
 
   const prevSlide = useCallback(() => {
     setCurrentSlide((prev) => (prev - 1 + promoSlides.length) % promoSlides.length);
+  }, [promoSlides.length]);
   }, []);
 
   useEffect(() => {
