@@ -58,6 +58,27 @@ async def serve_product_image(filename: str):
     
     return FileResponse(file_path)
 
+@public_router.get("/uploads/slides/{filename}")
+async def serve_slide_image(filename: str):
+    """Serve uploaded slide images"""
+    file_path = Path("/app/backend/uploads/slides") / filename
+    
+    if not file_path.exists():
+        raise HTTPException(status_code=404, detail="Image not found")
+    
+    return FileResponse(file_path)
+
+# ==================== PROMOTIONAL SLIDES ====================
+
+@public_router.get("/slides")
+async def get_public_slides(db: AsyncIOMotorDatabase = Depends(get_db)):
+    """Get all active promotional slides for the landing page"""
+    slides = await db.promo_slides.find(
+        {"is_active": True}, 
+        {"_id": 0}
+    ).sort("order", 1).to_list(100)
+    return slides
+
 # ==================== PRODUCTS ====================
 
 @public_router.get("/products", response_model=List[Product])
