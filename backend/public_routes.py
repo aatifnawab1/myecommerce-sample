@@ -4,10 +4,11 @@ from typing import List, Optional
 from datetime import datetime
 from motor.motor_asyncio import AsyncIOMotorDatabase
 from pathlib import Path
+import uuid
 from models import (
     Product, NotifyRequestCreate, NotifyRequest,
     Order, OrderCreate, CouponValidate, CouponValidateResponse,
-    OrderTrackRequest, OrderTrackResponse
+    OrderTrackRequest, OrderTrackResponse, ContactQueryCreate
 )
 from whatsapp_service import (
     send_order_confirmation_request,
