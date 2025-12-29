@@ -569,3 +569,51 @@ async def reorder_slides(
         )
     return {"message": "Slides reordered successfully"}
 
+
+# ==================== CONTACT QUERIES ====================
+
+@admin_router.get("/contact-queries")
+async def get_contact_queries(
+    admin_id: str = Depends(verify_admin_token),
+    db: AsyncIOMotorDatabase = Depends(get_db)
+):
+    """Get all contact queries"""
+    queries = await db.contact_queries.find({}, {"_id": 0}).sort("created_at", -1).to_list(1000)
+    return queries
+
+@admin_router.get("/contact-queries/unread-count")
+async def get_unread_count(
+    admin_id: str = Depends(verify_admin_token),
+    db: AsyncIOMotorDatabase = Depends(get_db)
+):
+    """Get count of unread contact queries"""
+    count = await db.contact_queries.count_documents({"is_read": False})
+    return {"count": count}
+
+@admin_router.put("/contact-queries/{query_id}/read")
+async def mark_query_as_read(
+    query_id: str,
+    admin_id: str = Depends(verify_admin_token),
+    db: AsyncIOMotorDatabase = Depends(get_db)
+):
+    """Mark a contact query as read"""
+    result = await db.contact_queries.update_one(
+        {"id": query_id},
+        {"$set": {"is_read": True}}
+    )
+    if result.modified_count == 0:
+        raise HTTPException(status_code=404, detail="Query not found")
+    return {"message": "Query marked as read"}
+
+@admin_router.delete("/contact-queries/{query_id}")
+async def delete_contact_query(
+    query_id: str,
+    admin_id: str = Depends(verify_admin_token),
+    db: AsyncIOMotorDatabase = Depends(get_db)
+):
+    """Delete a contact query"""
+    result = await db.contact_queries.delete_one({"id": query_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Query not found")
+    return {"message": "Query deleted successfully"}
+
