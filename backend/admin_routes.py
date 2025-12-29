@@ -467,3 +467,105 @@ async def get_dashboard_stats(
         "total_customers": total_customers,
         "total_revenue": total_revenue
     }
+
+
+# ==================== PROMOTIONAL SLIDES ====================
+
+@admin_router.get("/slides")
+async def get_slides(
+    admin_id: str = Depends(verify_admin_token),
+    db: AsyncIOMotorDatabase = Depends(get_db)
+):
+    """Get all promotional slides"""
+    slides = await db.promo_slides.find({}, {"_id": 0}).sort("order", 1).to_list(100)
+    return slides
+
+@admin_router.post("/slides")
+async def create_slide(
+    slide: PromoSlideCreate,
+    admin_id: str = Depends(verify_admin_token),
+    db: AsyncIOMotorDatabase = Depends(get_db)
+):
+    """Create a new promotional slide"""
+    slide_dict = slide.dict()
+    slide_dict["id"] = str(uuid.uuid4())
+    slide_dict["created_at"] = datetime.utcnow()
+    slide_dict["updated_at"] = datetime.utcnow()
+    
+    await db.promo_slides.insert_one(slide_dict)
+    return {"message": "Slide created successfully", "id": slide_dict["id"]}
+
+@admin_router.post("/slides/upload")
+async def upload_slide_image(
+    file: UploadFile = File(...),
+    admin_id: str = Depends(verify_admin_token),
+    db: AsyncIOMotorDatabase = Depends(get_db)
+):
+    """Upload a slide image"""
+    # Validate file type
+    allowed_types = ["image/jpeg", "image/png", "image/webp", "image/gif"]
+    if file.content_type not in allowed_types:
+        raise HTTPException(status_code=400, detail="Invalid file type. Allowed: JPEG, PNG, WebP, GIF")
+    
+    # Create uploads directory if it doesn't exist
+    upload_dir = Path("/app/backend/uploads/slides")
+    upload_dir.mkdir(parents=True, exist_ok=True)
+    
+    # Generate unique filename
+    file_ext = file.filename.split(".")[-1] if "." in file.filename else "jpg"
+    filename = f"{uuid.uuid4()}.{file_ext}"
+    file_path = upload_dir / filename
+    
+    # Save file
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+    
+    # Return the URL path
+    image_url = f"/api/uploads/slides/{filename}"
+    
+    return {"url": image_url, "filename": filename}
+
+@admin_router.put("/slides/{slide_id}")
+async def update_slide(
+    slide_id: str,
+    slide_update: PromoSlideUpdate,
+    admin_id: str = Depends(verify_admin_token),
+    db: AsyncIOMotorDatabase = Depends(get_db)
+):
+    """Update a promotional slide"""
+    existing = await db.promo_slides.find_one({"id": slide_id})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Slide not found")
+    
+    update_data = {k: v for k, v in slide_update.dict().items() if v is not None}
+    update_data["updated_at"] = datetime.utcnow()
+    
+    await db.promo_slides.update_one({"id": slide_id}, {"$set": update_data})
+    return {"message": "Slide updated successfully"}
+
+@admin_router.delete("/slides/{slide_id}")
+async def delete_slide(
+    slide_id: str,
+    admin_id: str = Depends(verify_admin_token),
+    db: AsyncIOMotorDatabase = Depends(get_db)
+):
+    """Delete a promotional slide"""
+    result = await db.promo_slides.delete_one({"id": slide_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Slide not found")
+    return {"message": "Slide deleted successfully"}
+
+@admin_router.put("/slides/reorder")
+async def reorder_slides(
+    slide_orders: List[dict],
+    admin_id: str = Depends(verify_admin_token),
+    db: AsyncIOMotorDatabase = Depends(get_db)
+):
+    """Reorder promotional slides"""
+    for item in slide_orders:
+        await db.promo_slides.update_one(
+            {"id": item["id"]},
+            {"$set": {"order": item["order"], "updated_at": datetime.utcnow()}}
+        )
+    return {"message": "Slides reordered successfully"}
+
