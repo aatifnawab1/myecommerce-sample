@@ -33,6 +33,7 @@ import AdminOrders from "./pages/admin/AdminOrders";
 import AdminCustomers from "./pages/admin/AdminCustomers";
 import AdminDemand from "./pages/admin/AdminDemand";
 import AdminCoupons from "./pages/admin/AdminCoupons";
+import AdminSlides from "./pages/admin/AdminSlides";
 
 function App() {
   return (
