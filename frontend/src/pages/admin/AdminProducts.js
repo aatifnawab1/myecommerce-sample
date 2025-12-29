@@ -305,6 +305,7 @@ const AdminProducts = () => {
                       <SelectItem value="perfume">Perfume</SelectItem>
                       <SelectItem value="drone">Drone</SelectItem>
                       <SelectItem value="watch">Watch</SelectItem>
+                      <SelectItem value="other">Other</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
