@@ -80,6 +80,23 @@ async def get_public_slides(db: AsyncIOMotorDatabase = Depends(get_db)):
     ).sort("order", 1).to_list(100)
     return slides
 
+# ==================== CONTACT QUERIES ====================
+
+@public_router.post("/contact")
+async def submit_contact_query(
+    query: ContactQueryCreate,
+    db: AsyncIOMotorDatabase = Depends(get_db)
+):
+    """Submit a contact query from the contact page"""
+    query_dict = query.dict()
+    query_dict["id"] = str(uuid.uuid4())
+    query_dict["is_read"] = False
+    query_dict["created_at"] = datetime.utcnow()
+    
+    await db.contact_queries.insert_one(query_dict)
+    
+    return {"message": "Your message has been sent successfully. We will get back to you soon!"}
+
 # ==================== PRODUCTS ====================
 
 @public_router.get("/products", response_model=List[Product])
