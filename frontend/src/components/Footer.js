@@ -76,15 +76,7 @@ const Footer = () => {
             <div className="flex flex-col gap-3">
               <div className="flex items-start gap-2">
                 <Mail className="h-4 w-4 text-amber-500 mt-0.5 flex-shrink-0" />
-                <span className="text-sm text-gray-400">info@zaylux.sa</span>
-              </div>
-              <div className="flex items-start gap-2">
-                <Phone className="h-4 w-4 text-amber-500 mt-0.5 flex-shrink-0" />
-                <span className="text-sm text-gray-400">+966 50 123 4567</span>
-              </div>
-              <div className="flex items-start gap-2">
-                <MapPin className="h-4 w-4 text-amber-500 mt-0.5 flex-shrink-0" />
-                <span className="text-sm text-gray-400">Riyadh, Saudi Arabia</span>
+                <span className="text-sm text-gray-400">support@zaylux.com</span>
               </div>
             </div>
           </div>
