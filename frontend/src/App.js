@@ -89,6 +89,7 @@ function App() {
                         <Route path="demand" element={<AdminDemand />} />
                         <Route path="coupons" element={<AdminCoupons />} />
                         <Route path="slides" element={<AdminSlides />} />
+                        <Route path="queries" element={<AdminQueries />} />
                       </Routes>
                     </AdminLayout>
                   </ProtectedAdminRoute>
