@@ -11,7 +11,8 @@ from models import (
     Product, ProductCreate, ProductUpdate,
     NotifyRequest, NotifyRequestCreate,
     Order, OrderCreate, OrderStatusUpdate,
-    Customer, Coupon, CouponCreate, CouponValidate, CouponValidateResponse
+    Customer, Coupon, CouponCreate, CouponValidate, CouponValidateResponse,
+    PromoSlide, PromoSlideCreate, PromoSlideUpdate
 )
 from auth import hash_password, verify_password, create_access_token, decode_access_token
 
