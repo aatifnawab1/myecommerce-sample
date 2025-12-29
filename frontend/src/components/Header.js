@@ -81,13 +81,11 @@ const Header = () => {
             {/* Cart */}
             <Link to="/cart">
               <Button
-                variant="ghost"
-                size="icon"
-                className="relative hover:bg-amber-500/10 hover:text-amber-500"
+                className="relative bg-amber-500 hover:bg-amber-600 text-black font-bold px-4 py-2"
               >
-                <ShoppingCart className="h-5 w-5" />
+                CART
                 {getCartCount() > 0 && (
-                  <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-amber-500 text-black text-xs flex items-center justify-center font-bold">
+                  <span className="absolute -top-2 -right-2 h-5 w-5 rounded-full bg-black text-amber-500 text-xs flex items-center justify-center font-bold border border-amber-500">
                     {getCartCount()}
                   </span>
                 )}
