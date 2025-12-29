@@ -10,6 +10,7 @@ export const translations = {
     perfumes: 'Perfumes',
     drones: 'Drones',
     watches: 'Watches',
+    others: 'Others',
     about: 'About Us',
     contact: 'Contact',
     cart: 'Cart',
