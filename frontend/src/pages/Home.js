@@ -64,7 +64,6 @@ const Home = () => {
   const prevSlide = useCallback(() => {
     setCurrentSlide((prev) => (prev - 1 + promoSlides.length) % promoSlides.length);
   }, [promoSlides.length]);
-  }, []);
 
   useEffect(() => {
     const timer = setInterval(nextSlide, 4000); // Auto-slide every 4 seconds
@@ -74,6 +73,7 @@ const Home = () => {
   useEffect(() => {
     fetchProducts();
     fetchCoupons();
+    fetchSlides();
   }, []);
 
   const fetchProducts = async () => {
@@ -93,6 +93,19 @@ const Home = () => {
       setCoupons(data);
     } catch (error) {
       console.error('Error fetching coupons:', error);
+    }
+  };
+
+  const fetchSlides = async () => {
+    try {
+      const data = await publicAPI.getSlides();
+      if (data && data.length > 0) {
+        setPromoSlides(data);
+      }
+      // If no slides in DB, keep using default slides
+    } catch (error) {
+      console.error('Error fetching slides:', error);
+      // Keep using default slides on error
     }
   };
 
