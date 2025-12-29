@@ -174,3 +174,32 @@ class CouponValidateResponse(BaseModel):
     discount_percentage: float = 0.0
     discount_amount: float = 0.0
     message: str = ""
+
+
+# Promotional Slide Models
+class PromoSlide(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    image_url: str
+    alt_text_en: str = ""
+    alt_text_ar: str = ""
+    link_url: Optional[str] = None
+    order: int = 0
+    is_active: bool = True
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+
+class PromoSlideCreate(BaseModel):
+    image_url: str
+    alt_text_en: str = ""
+    alt_text_ar: str = ""
+    link_url: Optional[str] = None
+    order: int = 0
+    is_active: bool = True
+
+class PromoSlideUpdate(BaseModel):
+    image_url: Optional[str] = None
+    alt_text_en: Optional[str] = None
+    alt_text_ar: Optional[str] = None
+    link_url: Optional[str] = None
+    order: Optional[int] = None
+    is_active: Optional[bool] = None
