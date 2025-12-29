@@ -22,7 +22,10 @@ export const translations = {
     shopNow: 'Shop Now',
     premiumQuality: 'Premium Quality Guaranteed',
     watchesSubtitle: 'Discover our collection of premium luxury watches',
+    othersSubtitle: 'Explore our diverse collection of premium products',
     noProductsFound: 'No products found',
+    under100: 'Under 100 SAR',
+    over1000: 'Over 1000 SAR',
     
     // Products
     addToCart: 'Add to Cart',
