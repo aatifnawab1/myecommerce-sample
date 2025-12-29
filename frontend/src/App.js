@@ -13,6 +13,7 @@ import Shop from "./pages/Shop";
 import Perfumes from "./pages/Perfumes";
 import Drones from "./pages/Drones";
 import Watches from "./pages/Watches";
+import Others from "./pages/Others";
 import ProductDetail from "./pages/ProductDetail";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
@@ -55,6 +56,7 @@ function App() {
                         <Route path="/perfumes" element={<Perfumes />} />
                         <Route path="/drones" element={<Drones />} />
                         <Route path="/watches" element={<Watches />} />
+                        <Route path="/others" element={<Others />} />
                         <Route path="/product/:id" element={<ProductDetail />} />
                         <Route path="/cart" element={<Cart />} />
                         <Route path="/checkout" element={<Checkout />} />
