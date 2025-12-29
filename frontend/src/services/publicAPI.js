@@ -60,6 +60,12 @@ class PublicAPI {
     const response = await axios.get(`${API}/slides`);
     return response.data;
   }
+
+  // Contact Query
+  async submitContactQuery(queryData) {
+    const response = await axios.post(`${API}/contact`, queryData);
+    return response.data;
+  }
 }
 
 export default new PublicAPI();
