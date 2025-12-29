@@ -160,10 +160,12 @@ const Home = () => {
                         ? 'opacity-100 relative' 
                         : 'opacity-0 absolute inset-0'
                     }`}
+                    onClick={() => slide.link_url && navigate(slide.link_url)}
+                    style={{ cursor: slide.link_url ? 'pointer' : 'default' }}
                   >
                     <img
-                      src={slide.image}
-                      alt={slide.alt}
+                      src={getImageUrl(slide.image_url)}
+                      alt={language === 'ar' ? slide.alt_text_ar : slide.alt_text_en}
                       className="w-full h-auto object-contain"
                     />
                     {/* Floating glow effect */}
