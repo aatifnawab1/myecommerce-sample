@@ -12,7 +12,8 @@ import {
   Menu,
   X,
   Sparkles,
-  Image
+  Image,
+  MessageSquare
 } from 'lucide-react';
 import { Button } from '../ui/button';
 
@@ -34,7 +35,8 @@ const AdminLayout = ({ children }) => {
     { path: '/admin/customers', icon: Users, label: 'Customers' },
     { path: '/admin/demand', icon: Bell, label: 'Product Demand' },
     { path: '/admin/coupons', icon: Tag, label: 'Coupons' },
-    { path: '/admin/slides', icon: Image, label: 'Promo Slides' }
+    { path: '/admin/slides', icon: Image, label: 'Promo Slides' },
+    { path: '/admin/queries', icon: MessageSquare, label: 'Contact Queries' }
   ];
 
   const isActive = (path) => location.pathname === path;
