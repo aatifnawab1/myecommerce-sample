@@ -11,7 +11,8 @@ import {
   LogOut,
   Menu,
   X,
-  Sparkles
+  Sparkles,
+  Image
 } from 'lucide-react';
 import { Button } from '../ui/button';
 
@@ -32,7 +33,8 @@ const AdminLayout = ({ children }) => {
     { path: '/admin/orders', icon: ShoppingCart, label: 'Orders' },
     { path: '/admin/customers', icon: Users, label: 'Customers' },
     { path: '/admin/demand', icon: Bell, label: 'Product Demand' },
-    { path: '/admin/coupons', icon: Tag, label: 'Coupons' }
+    { path: '/admin/coupons', icon: Tag, label: 'Coupons' },
+    { path: '/admin/slides', icon: Image, label: 'Promo Slides' }
   ];
 
   const isActive = (path) => location.pathname === path;
