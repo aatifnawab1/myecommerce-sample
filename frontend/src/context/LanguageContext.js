@@ -174,7 +174,10 @@ export const translations = {
     shopNow: 'تسوق الآن',
     premiumQuality: 'جودة فاخرة مضمونة',
     watchesSubtitle: 'اكتشف مجموعتنا من الساعات الفاخرة',
+    othersSubtitle: 'استكشف مجموعتنا المتنوعة من المنتجات الفاخرة',
     noProductsFound: 'لم يتم العثور على منتجات',
+    under100: 'أقل من 100 ريال',
+    over1000: 'أكثر من 1000 ريال',
     
     // Products
     addToCart: 'أضف إلى السلة',
