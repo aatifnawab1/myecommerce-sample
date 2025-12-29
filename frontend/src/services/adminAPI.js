@@ -254,6 +254,35 @@ class AdminAPI {
     });
     return response.data;
   }
+
+  // Contact Queries
+  async getContactQueries() {
+    const response = await axios.get(`${API}/admin/contact-queries`, {
+      headers: this.getHeaders()
+    });
+    return response.data;
+  }
+
+  async getUnreadQueryCount() {
+    const response = await axios.get(`${API}/admin/contact-queries/unread-count`, {
+      headers: this.getHeaders()
+    });
+    return response.data;
+  }
+
+  async markQueryAsRead(queryId) {
+    const response = await axios.put(`${API}/admin/contact-queries/${queryId}/read`, {}, {
+      headers: this.getHeaders()
+    });
+    return response.data;
+  }
+
+  async deleteContactQuery(queryId) {
+    const response = await axios.delete(`${API}/admin/contact-queries/${queryId}`, {
+      headers: this.getHeaders()
+    });
+    return response.data;
+  }
 }
 
 export default new AdminAPI();
