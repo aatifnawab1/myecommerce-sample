@@ -162,6 +162,7 @@ export const translations = {
     perfumes: 'العطور',
     drones: 'الطائرات',
     watches: 'الساعات',
+    others: 'أخرى',
     about: 'من نحن',
     contact: 'اتصل بنا',
     cart: 'السلة',
