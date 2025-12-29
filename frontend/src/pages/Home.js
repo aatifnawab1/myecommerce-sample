@@ -358,9 +358,10 @@ const Home = () => {
               {language === 'ar' ? 'اختر من مجموعاتنا المميزة' : 'Choose from our exclusive collections'}
             </p>
           </div>
-          <div className="grid grid-cols-3 md:grid-cols-3 gap-3 md:gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
+            {/* Perfumes */}
             <div
-              className="relative h-32 sm:h-48 md:h-80 rounded-lg overflow-hidden group cursor-pointer"
+              className="relative h-40 sm:h-48 md:h-72 rounded-lg overflow-hidden group cursor-pointer"
               onClick={() => navigate('/perfumes')}
             >
               {perfumes[0] ? (
@@ -370,21 +371,21 @@ const Home = () => {
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
               ) : (
-                <div className="w-full h-full bg-gradient-to-br from-amber-900/50 to-zinc-900" />
+                <div className="w-full h-full bg-gradient-to-br from-amber-900/50 to-zinc-900 flex items-center justify-center">
+                  <span className="text-4xl">🧴</span>
+                </div>
               )}
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent flex flex-col justify-end p-2 sm:p-4 md:p-6">
-                <h3 className="text-sm sm:text-lg md:text-2xl font-bold text-white mb-0 sm:mb-1 md:mb-2">{t('perfumes')}</h3>
-                <p className="text-gray-300 text-xs md:text-sm mb-1 md:mb-3 hidden sm:block">
-                  {language === 'ar' ? 'اكتشف العطور الفاخرة' : 'Explore luxury fragrances'}
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent flex flex-col justify-end p-3 md:p-5">
+                <h3 className="text-base sm:text-lg md:text-xl font-bold text-white">{t('perfumes')}</h3>
+                <p className="text-gray-300 text-xs md:text-sm hidden sm:block mt-1">
+                  {language === 'ar' ? 'العطور الفاخرة' : 'Luxury fragrances'}
                 </p>
-                <Button className="w-fit bg-amber-500 hover:bg-amber-600 text-black font-semibold text-xs md:text-sm px-2 py-1 md:px-4 md:py-2 h-auto hidden md:flex">
-                  {language === 'ar' ? 'تسوق العطور' : 'Shop Perfumes'}
-                </Button>
               </div>
             </div>
 
+            {/* Drones */}
             <div
-              className="relative h-32 sm:h-48 md:h-80 rounded-lg overflow-hidden group cursor-pointer"
+              className="relative h-40 sm:h-48 md:h-72 rounded-lg overflow-hidden group cursor-pointer"
               onClick={() => navigate('/drones')}
             >
               {drones[0] ? (
@@ -394,21 +395,21 @@ const Home = () => {
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
               ) : (
-                <div className="w-full h-full bg-gradient-to-br from-blue-900/50 to-zinc-900" />
+                <div className="w-full h-full bg-gradient-to-br from-blue-900/50 to-zinc-900 flex items-center justify-center">
+                  <span className="text-4xl">🚁</span>
+                </div>
               )}
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent flex flex-col justify-end p-2 sm:p-4 md:p-6">
-                <h3 className="text-sm sm:text-lg md:text-2xl font-bold text-white mb-0 sm:mb-1 md:mb-2">{t('drones')}</h3>
-                <p className="text-gray-300 text-xs md:text-sm mb-1 md:mb-3 hidden sm:block">
-                  {language === 'ar' ? 'اكتشف التكنولوجيا المتقدمة' : 'Discover advanced technology'}
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent flex flex-col justify-end p-3 md:p-5">
+                <h3 className="text-base sm:text-lg md:text-xl font-bold text-white">{t('drones')}</h3>
+                <p className="text-gray-300 text-xs md:text-sm hidden sm:block mt-1">
+                  {language === 'ar' ? 'تكنولوجيا متقدمة' : 'Advanced tech'}
                 </p>
-                <Button className="w-fit bg-amber-500 hover:bg-amber-600 text-black font-semibold text-xs md:text-sm px-2 py-1 md:px-4 md:py-2 h-auto hidden md:flex">
-                  {language === 'ar' ? 'تسوق الطائرات' : 'Shop Drones'}
-                </Button>
               </div>
             </div>
 
+            {/* Watches */}
             <div
-              className="relative h-32 sm:h-48 md:h-80 rounded-lg overflow-hidden group cursor-pointer"
+              className="relative h-40 sm:h-48 md:h-72 rounded-lg overflow-hidden group cursor-pointer"
               onClick={() => navigate('/watches')}
             >
               {watches[0] ? (
@@ -419,17 +420,38 @@ const Home = () => {
                 />
               ) : (
                 <div className="w-full h-full bg-gradient-to-br from-zinc-700/50 to-zinc-900 flex items-center justify-center">
-                  <span className="text-3xl md:text-6xl">⌚</span>
+                  <span className="text-4xl">⌚</span>
                 </div>
               )}
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent flex flex-col justify-end p-2 sm:p-4 md:p-6">
-                <h3 className="text-sm sm:text-lg md:text-2xl font-bold text-white mb-0 sm:mb-1 md:mb-2">{t('watches')}</h3>
-                <p className="text-gray-300 text-xs md:text-sm mb-1 md:mb-3 hidden sm:block">
-                  {language === 'ar' ? 'اكتشف الساعات الفاخرة' : 'Discover luxury timepieces'}
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent flex flex-col justify-end p-3 md:p-5">
+                <h3 className="text-base sm:text-lg md:text-xl font-bold text-white">{t('watches')}</h3>
+                <p className="text-gray-300 text-xs md:text-sm hidden sm:block mt-1">
+                  {language === 'ar' ? 'ساعات فاخرة' : 'Luxury timepieces'}
                 </p>
-                <Button className="w-fit bg-amber-500 hover:bg-amber-600 text-black font-semibold text-xs md:text-sm px-2 py-1 md:px-4 md:py-2 h-auto hidden md:flex">
-                  {language === 'ar' ? 'تسوق الساعات' : 'Shop Watches'}
-                </Button>
+              </div>
+            </div>
+
+            {/* Others */}
+            <div
+              className="relative h-40 sm:h-48 md:h-72 rounded-lg overflow-hidden group cursor-pointer"
+              onClick={() => navigate('/others')}
+            >
+              {others[0] ? (
+                <img
+                  src={getImageUrl(others[0].images?.[0] || others[0].image)}
+                  alt="Others"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+              ) : (
+                <div className="w-full h-full bg-gradient-to-br from-purple-900/50 to-zinc-900 flex items-center justify-center">
+                  <span className="text-4xl">🎁</span>
+                </div>
+              )}
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent flex flex-col justify-end p-3 md:p-5">
+                <h3 className="text-base sm:text-lg md:text-xl font-bold text-white">{t('others')}</h3>
+                <p className="text-gray-300 text-xs md:text-sm hidden sm:block mt-1">
+                  {language === 'ar' ? 'منتجات متنوعة' : 'More products'}
+                </p>
               </div>
             </div>
           </div>
