@@ -205,6 +205,55 @@ class AdminAPI {
     });
     return response.data;
   }
+
+  // Promotional Slides
+  async getSlides() {
+    const response = await axios.get(`${API}/admin/slides`, {
+      headers: this.getHeaders()
+    });
+    return response.data;
+  }
+
+  async createSlide(slideData) {
+    const response = await axios.post(`${API}/admin/slides`, slideData, {
+      headers: this.getHeaders()
+    });
+    return response.data;
+  }
+
+  async uploadSlideImage(file) {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    const response = await axios.post(`${API}/admin/slides/upload`, formData, {
+      headers: {
+        ...this.getHeaders(),
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    return response.data;
+  }
+
+  async updateSlide(slideId, slideData) {
+    const response = await axios.put(`${API}/admin/slides/${slideId}`, slideData, {
+      headers: this.getHeaders()
+    });
+    return response.data;
+  }
+
+  async deleteSlide(slideId) {
+    const response = await axios.delete(`${API}/admin/slides/${slideId}`, {
+      headers: this.getHeaders()
+    });
+    return response.data;
+  }
+
+  async reorderSlides(slideOrders) {
+    const response = await axios.put(`${API}/admin/slides/reorder`, slideOrders, {
+      headers: this.getHeaders()
+    });
+    return response.data;
+  }
 }
 
 export default new AdminAPI();
