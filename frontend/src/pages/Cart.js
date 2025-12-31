@@ -20,6 +20,23 @@ const Cart = () => {
   const { t, language } = useLanguage();
   const { cartItems, updateQuantity, removeFromCart, getCartTotal } = useCart();
 
+  const handleProceedToCheckout = () => {
+    // Meta Pixel: Track InitiateCheckout
+    if (window.fbq) {
+      window.fbq('track', 'InitiateCheckout', {
+        content_ids: cartItems.map(item => item.id),
+        contents: cartItems.map(item => ({
+          id: item.id,
+          quantity: item.quantity
+        })),
+        num_items: cartItems.reduce((sum, item) => sum + item.quantity, 0),
+        value: getCartTotal(),
+        currency: 'SAR'
+      });
+    }
+    navigate('/checkout');
+  };
+
   if (cartItems.length === 0) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center px-4">
