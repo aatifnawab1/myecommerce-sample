@@ -1,10 +1,45 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { LanguageProvider } from "./context/LanguageContext";
 import { CartProvider } from "./context/CartContext";
 import { AdminAuthProvider } from "./context/AdminAuthContext";
 import { Toaster } from "./components/ui/sonner";
+
+// Meta Pixel initialization
+const initMetaPixel = () => {
+  if (typeof window !== 'undefined' && !window.fbq) {
+    (function(f,b,e,v,n,t,s) {
+      if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s);
+    })(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    window.fbq('init', '2115254759280245');
+    window.fbq('track', 'PageView');
+  }
+};
+
+// Component to track page views on route changes
+const MetaPixelTracker = () => {
+  const location = useLocation();
+  
+  useEffect(() => {
+    // Initialize pixel on first load
+    initMetaPixel();
+  }, []);
+  
+  useEffect(() => {
+    // Track page view on route change
+    if (window.fbq) {
+      window.fbq('track', 'PageView');
+    }
+  }, [location]);
+  
+  return null;
+};
 
 import Header from "./components/Header";
 import Footer from "./components/Footer";
