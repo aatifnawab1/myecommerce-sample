@@ -41,6 +41,19 @@ const ProductDetail = () => {
     fetchProduct();
   }, [id]);
 
+  // Track ViewContent when product is loaded
+  useEffect(() => {
+    if (product && window.fbq) {
+      window.fbq('track', 'ViewContent', {
+        content_name: product.name_en,
+        content_ids: [product.id],
+        content_type: 'product',
+        value: product.price,
+        currency: 'SAR'
+      });
+    }
+  }, [product]);
+
   const fetchProduct = async () => {
     try {
       const data = await publicAPI.getProduct(id);
