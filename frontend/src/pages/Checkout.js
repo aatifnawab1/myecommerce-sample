@@ -125,6 +125,22 @@ const Checkout = () => {
     try {
       const response = await publicAPI.createOrder(orderData);
       setPublicOrderId(response.public_order_id);
+      
+      // Meta Pixel: Track Purchase
+      if (window.fbq) {
+        window.fbq('track', 'Purchase', {
+          content_ids: cartItems.map(item => item.id),
+          contents: cartItems.map(item => ({
+            id: item.id,
+            quantity: item.quantity
+          })),
+          content_type: 'product',
+          num_items: cartItems.reduce((sum, item) => sum + item.quantity, 0),
+          value: total,
+          currency: 'SAR'
+        });
+      }
+      
       toast.success(language === 'ar' ? 'تم تقديم الطلب بنجاح!' : 'Order placed successfully!');
       setOrderPlaced(true);
       clearCart();
