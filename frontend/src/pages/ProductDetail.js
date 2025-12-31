@@ -94,6 +94,17 @@ const ProductDetail = () => {
   const handleAddToCart = () => {
     addToCart(product, quantity);
     toast.success(`${quantity}x ${productName} added to cart!`);
+    
+    // Meta Pixel: Track AddToCart
+    if (window.fbq) {
+      window.fbq('track', 'AddToCart', {
+        content_name: product.name_en,
+        content_ids: [product.id],
+        content_type: 'product',
+        value: product.price * quantity,
+        currency: 'SAR'
+      });
+    }
   };
 
   const handleNotifyMe = async (e) => {
