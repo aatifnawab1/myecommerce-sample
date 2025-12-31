@@ -31,6 +31,17 @@ const ProductCard = ({ product }) => {
       addToCart(product);
       const productName = language === 'ar' ? product.name_ar : product.name_en;
       toast.success(`${productName} added to cart!`);
+      
+      // Meta Pixel: Track AddToCart
+      if (window.fbq) {
+        window.fbq('track', 'AddToCart', {
+          content_name: product.name_en,
+          content_ids: [product.id],
+          content_type: 'product',
+          value: product.price,
+          currency: 'SAR'
+        });
+      }
     }
   };
 
