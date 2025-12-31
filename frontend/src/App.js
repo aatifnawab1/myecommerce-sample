@@ -78,6 +78,7 @@ function App() {
       <CartProvider>
         <AdminAuthProvider>
           <BrowserRouter>
+            <MetaPixelTracker />
             <Routes>
               {/* Public Routes */}
               <Route
