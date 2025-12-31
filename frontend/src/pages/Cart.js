@@ -158,7 +158,7 @@ const Cart = () => {
                 </div>
 
                 <Button
-                  onClick={() => navigate('/checkout')}
+                  onClick={handleProceedToCheckout}
                   className="w-full bg-amber-500 hover:bg-amber-600 text-black font-bold py-6 text-lg transition-all hover:scale-[1.02]"
                 >
                   {t('proceedToCheckout')}
